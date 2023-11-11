@@ -1,5 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import phoneBookReducer from "./reducers";
+import thunk from "redux-thunk";
 
 const localStorageMiddleware = ({ getState }: any) => {
   return (next: any) => (action: any) => {
@@ -30,7 +31,7 @@ export const store = configureStore({
   },
   preloadedState: loadFromLocalStorage(),
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(localStorageMiddleware),
+    getDefaultMiddleware().concat([localStorageMiddleware, thunk]),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

@@ -28,7 +28,7 @@ const Landing = () => {
       setIsError(true);
       return;
     }
-    dispatch(login());
+    dispatch(login({ userName: name }));
     navigate("/home");
   };
 
