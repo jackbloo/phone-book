@@ -18,6 +18,7 @@ import {
   Label,
   ModalContainer,
   ModalContent,
+  PhoneNumberContainer,
   RemovePhoneNumber,
   TextAction,
   TextNo,
@@ -30,7 +31,9 @@ import {
   ADD_NUMBER_TO_CONTACT,
   EDIT_CONTACT,
   EDIT_PHONE_NUMBER,
+  GET_CONTACT_LIST,
 } from "../../apolloClient/queries";
+import { ContactListType } from "../../interface/reducer";
 
 const Modal = () => {
   const dispatch = useDispatch();
@@ -40,6 +43,7 @@ const Modal = () => {
   const [phoneNumbers, setPhoneNumbers] = useState([""]);
   const [phoneNumbersError, setPhoneNumbersError] = useState([false]);
   const [firstNameError, setFirstNameError] = useState(false);
+  const [duplicateNameError, setDuplicateNameError] = useState(false);
   const [lastNameError, setLastNameError] = useState(false);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -80,6 +84,7 @@ const Modal = () => {
   };
 
   const handleReset = () => {
+    setDuplicateNameError(false);
     setFirstName("");
     setLastName("");
     setPhoneNumbers([""]);
@@ -193,22 +198,37 @@ const Modal = () => {
     });
 
     if (createModal) {
-      const { data, errors } = await apolloClient.mutate({
-        mutation: ADD_CONTACT_WITH_PHONES,
-        variables: {
-          first_name: firstName,
-          last_name: lastName,
-          phones: newPhone,
-        },
+      const { data: allData, errors: getError } = await apolloClient.query({
+        query: GET_CONTACT_LIST,
       });
-      if (errors) {
-      } else if (data) {
-        if (data?.insert_contact) {
-          if (data?.insert_contact?.returning?.length > 0) {
-            if (createModal) {
-              dispatch(setAddContact(data?.insert_contact?.returning[0]));
-              dispatch(setCreateModal(false));
-              handleReset();
+      if (getError) {
+      } else if (allData) {
+        const allNames = new Set(
+          allData?.contact?.map((el: ContactListType) =>
+            el.first_name.toLocaleLowerCase()
+          )
+        );
+        if (allNames.has(firstName)) {
+          setDuplicateNameError(true);
+        } else {
+          const { data, errors } = await apolloClient.mutate({
+            mutation: ADD_CONTACT_WITH_PHONES,
+            variables: {
+              first_name: firstName,
+              last_name: lastName,
+              phones: newPhone,
+            },
+          });
+          if (errors) {
+          } else if (data) {
+            if (data?.insert_contact) {
+              if (data?.insert_contact?.returning?.length > 0) {
+                if (createModal) {
+                  dispatch(setAddContact(data?.insert_contact?.returning[0]));
+                  dispatch(setCreateModal(false));
+                  handleReset();
+                }
+              }
             }
           }
         }
@@ -336,7 +356,7 @@ const Modal = () => {
       }
     }
   };
-  const showModal = createModal || editModal;
+  const showModal: boolean = createModal || editModal;
   return (
     <>
       {showModal &&
@@ -353,9 +373,15 @@ const Modal = () => {
                       handleOnChange("firstName", e.target.value)
                     }
                   />
-                  {firstNameError && (
-                    <ErrorLabel>Please insert correct first name</ErrorLabel>
-                  )}
+                  {firstNameError ||
+                    (duplicateNameError && (
+                      <ErrorLabel>
+                        {firstNameError
+                          ? "Please insert correct first name"
+                          : "The name is existed, Please choose another name"}
+                      </ErrorLabel>
+                    ))}
+
                   <Label>Last Name</Label>
                   <Input
                     value={lastName}
@@ -365,7 +391,7 @@ const Modal = () => {
                     <ErrorLabel>Please insert correct Last Name</ErrorLabel>
                   )}
                   {phoneNumbers.map((el, index) => (
-                    <>
+                    <PhoneNumberContainer key={index}>
                       <Label>
                         Phone Number {index + 1}{" "}
                         {index !== 0 && (
@@ -385,14 +411,14 @@ const Modal = () => {
                       {phoneNumbersError[index] && (
                         <ErrorLabel>Please insert correct Number</ErrorLabel>
                       )}
-                    </>
+                    </PhoneNumberContainer>
                   ))}
+                  {phoneNumbers.length < 3 && (
+                    <ExtraButton onClick={AddPhoneNumber}>
+                      + Add more Phone Number
+                    </ExtraButton>
+                  )}
                 </BodyContent>
-                {phoneNumbers.length < 3 && (
-                  <ExtraButton onClick={AddPhoneNumber}>
-                    + Add more Phone Number
-                  </ExtraButton>
-                )}
               </TopContent>
 
               <ActionContainer>

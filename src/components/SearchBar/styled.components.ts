@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 import { pixelSize } from "../../utils/constants";
+import { device } from "../../utils";
 
 export const Input = styled.input`
   background: 0;
@@ -14,4 +15,7 @@ export const InputContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  @media ${device.tablet} {
+    margin-top: 50px;
+  }
 `;

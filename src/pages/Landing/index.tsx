@@ -1,4 +1,4 @@
-import { EventHandler, useState } from "react";
+import { useState } from "react";
 import {
   Container,
   ImageBook,
@@ -8,18 +8,22 @@ import {
   NameContainer,
   Image,
   ErrorContainer,
+  Title,
 } from "./styled.components";
 import Navbar from "../../components/Navbar";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { login } from "../../store/reducers";
-import Shakehands from "../../assets/image/shakehands.jpg";
+import Shakehands from "../../assets/image/shakehands.webp";
 import SubmitName from "../../assets/image/submitIcon.svg";
 import Warning from "../../assets/image/warning.svg";
+import { RootState } from "../../store/store";
 
 const Landing = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { isLogin } = useSelector((state: RootState) => state.phoneBook);
+
   const [name, setName] = useState("");
   const [isError, setIsError] = useState(false);
   const handleSubmit = (e: any) => {
@@ -40,8 +44,9 @@ const Landing = () => {
   };
   return (
     <Container>
-      <Navbar />
+      <Navbar dispatch={dispatch} isLogin={isLogin} />
       <ImageContainer>
+        <Title>Welcome to the best Phonebook</Title>
         <ImageBook src={Shakehands} />
         <NameContainer>
           <InputContainer>

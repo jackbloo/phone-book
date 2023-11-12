@@ -39,7 +39,12 @@ export const phonebookSlice = createSlice({
           image: randomAvatar(),
         };
       });
-      state.contactList = [...state.contactList, ...newContactList];
+      const ids = new Set(state.contactList.map((d) => d.id));
+      const mergedList = [
+        ...state.contactList,
+        ...newContactList.filter((d) => !ids.has(d.id)),
+      ];
+      state.contactList = mergedList;
     },
     setSearchBar: (state, { payload }) => {
       state.contactList = [];
@@ -85,7 +90,6 @@ export const phonebookSlice = createSlice({
       state.editData = payload;
     },
     setUpdateData: (state, { payload }) => {
-      console.log(payload);
       const copyContactList = [...state.contactList];
       const updateContactList = copyContactList.map((el) => {
         if (el.id === payload?.id) {
@@ -100,6 +104,11 @@ export const phonebookSlice = createSlice({
         }
       });
       state.contactList = [...updateContactList];
+    },
+    setLogout: (state) => {
+      state.contactList = [];
+      state.noMoreData = false;
+      state.isLogin = false;
     },
   },
 });
@@ -116,6 +125,7 @@ export const {
   setEditModal,
   setEditData,
   setUpdateData,
+  setLogout,
 } = phonebookSlice.actions;
 
 export default phonebookSlice.reducer;

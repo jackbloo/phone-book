@@ -14,6 +14,9 @@ import {
   TopContainer,
   FavoriteContainer,
   FavoriteIcons,
+  SubtitleDesktop,
+  MoreText,
+  Text,
 } from "./styled.components";
 import { Avatar } from "./styled.components";
 import EditIcon from "../../assets/image/edit.png";
@@ -49,7 +52,7 @@ const ContactListComponent = ({ contactList }: ContactListComponentProps) => {
   };
   return (
     <Container>
-      {contactList?.map((el: ContactListType) => (
+      {contactList?.map((el: ContactListType, index: number) => (
         <Items key={el.id}>
           <TopContainer>
             <FavoriteContainer>
@@ -58,20 +61,30 @@ const ContactListComponent = ({ contactList }: ContactListComponentProps) => {
                   handleFavorite(el, el.isFavorite ? "unfavorite" : "favorite")
                 }
                 src={el.isFavorite ? FavoriteIcon : UnfavoriteIcon}
+                alt={el.isFavorite ? "unfavorite" : "favorite" + index}
               />
             </FavoriteContainer>
-            <Avatar src={el.image} />
+            <Avatar src={el.image} alt={`avatar-${el.id}`} />
             <Title>{el.first_name + " " + el.last_name}</Title>
             <Subtitle>
               {el?.phones?.length > 0 &&
                 el?.phones
                   ?.slice(0, 3)
                   .map((el: PhoneType, index: number) => (
-                    <div key={index}>{el.number}</div>
+                    <Text key={index}>{el.number}</Text>
                   ))}
-              {el?.phones?.length > 3 &&
-                `+${el?.phones?.slice(0, 3)?.length} more`}
+              <MoreText>
+                {el?.phones?.length > 3 &&
+                  `+${el?.phones?.slice(0, 3)?.length} more`}
+              </MoreText>
             </Subtitle>
+            <SubtitleDesktop>
+              {el?.phones[0].number}
+              <MoreText>
+                {el?.phones?.length > 3 &&
+                  `  +${el?.phones?.slice(0, 3)?.length} more`}
+              </MoreText>
+            </SubtitleDesktop>
           </TopContainer>
 
           <ActionsContainer>

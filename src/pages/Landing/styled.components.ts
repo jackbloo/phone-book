@@ -1,9 +1,11 @@
 import styled from "@emotion/styled";
+import { keyframes } from "@emotion/react";
 import { pixelSize } from "../../utils/constants";
 
 export const Container = styled.div`
   height: ${pixelSize.fullHeight};
   width: ${pixelSize.fullWidth};
+  background: linear-gradient(white, #7bb8c0);
 `;
 
 export const ImageBook = styled.img`
@@ -36,6 +38,10 @@ export const Input = styled.input`
   font-size: 1.5em;
   border-bottom: 1px solid black;
   padding-bottom: ${pixelSize.space_5};
+  ::placeholder {
+    color: black;
+    opacity: 1; /* Firefox */
+  }
 `;
 
 export const Image = styled.img<{ isError?: boolean }>`
@@ -50,4 +56,25 @@ export const ErrorContainer = styled.div`
   color: red;
   display: flex;
   align-items: flex-start;
+`;
+const typing = keyframes`
+  from { width: 0 }   to { width: 50% }
+`;
+
+const blinkCaret = keyframes`
+  from, to { border-color: transparent }
+  50% { border-color: orange; }`;
+
+export const Title = styled.div`
+  font-size: 20px;
+  font-weight: 700;
+  color: black;
+  margin-bottom: 10px;
+  overflow: hidden;
+  border-right: 0.15em solid orange;
+  white-space: nowrap;
+  margin: 0 auto;
+  letter-spacing: 0.15em;
+  animation: ${typing} 3.5s steps(40, end),
+    ${blinkCaret} 0.75s step-end infinite;
 `;

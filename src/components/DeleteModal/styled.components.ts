@@ -16,7 +16,7 @@ export const ModalContainer = styled.div`
 `;
 
 export const ModalContent = styled.div`
-  width: 90%;
+  width: 300px;
   height: 20%;
   background-color: white;
   color: #fff;
@@ -31,7 +31,7 @@ export const ModalContent = styled.div`
 export const Title = styled.div`
   font-weight: 700;
   color: black;
-  font-size: 12px;
+  font-size: 14px;
 `;
 
 export const TextAction = styled.div`
@@ -41,6 +41,7 @@ export const TextAction = styled.div`
 export const TextNo = styled.div`
   color: red;
   font-size: 20px;
+  font-weight: 600;
 `;
 
 export const ActionContainer = styled.div`

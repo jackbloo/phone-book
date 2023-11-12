@@ -12,6 +12,8 @@ const DefaultRoutes = () => {
   React.useEffect(() => {
     if (!isLogin && location?.pathname !== "/") {
       return navigate("/");
+    } else if (isLogin && location?.pathname === "/") {
+      return navigate("/home");
     }
   }, [isLogin]);
   return (

@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 import { pixelSize } from "../../utils/constants";
+import { device } from "../../utils";
 
 export const Container = styled.div`
   width: ${pixelSize.fullWidth};
@@ -10,6 +11,12 @@ export const ContentContainer = styled.div`
   margin-top: ${pixelSize.space_20};
   padding: ${pixelSize.space_10};
   font-weight: 600;
+  @media ${device.tablet} {
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+    margin-top: 0px;
+  }
 `;
 
 export const PlusButton = styled.div`
@@ -27,6 +34,9 @@ export const PlusButton = styled.div`
   right: 20px;
   bottom: 50px;
   z-index: 999;
+  -webkit-box-shadow: 0px 0px 24px -9px rgba(192, 192, 192, 1);
+  -moz-box-shadow: 0px 0px 24px -9px rgba(192, 192, 192, 1);
+  box-shadow: 0px 0px 24px -9px rgba(192, 192, 192, 1);
 `;
 
 export const TitleContainer = styled.div`
@@ -35,6 +45,9 @@ export const TitleContainer = styled.div`
   font-weight: 700;
   display: flex;
   flex-direction: column;
+  @media ${device.tablet} {
+    display: none;
+  }
 `;
 
 export const Avatar = styled.img`
@@ -54,4 +67,24 @@ export const MoreButton = styled.div`
   max-width: 100px;
   padding: 10px;
   border: 1px solid black;
+  -webkit-box-shadow: 0px 0px 24px -9px rgba(192, 192, 192, 1);
+  -moz-box-shadow: 0px 0px 24px -9px rgba(192, 192, 192, 1);
+  box-shadow: 0px 0px 24px -9px rgba(192, 192, 192, 1);
+  border-radius: 20px;
+`;
+
+export const BodyContent = styled.div`
+  @media ${device.tablet} {
+    display: flex;
+    max-height: 100vh;
+    overflow: hidden;
+  }
+`;
+
+export const RightMenu = styled.div`
+  @media ${device.tablet} {
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+  }
 `;

@@ -29,3 +29,7 @@ export interface PhoneType {
 export interface ContactListComponentProps {
   contactList: ContactListType[];
 }
+
+export interface LeftMenuProps {
+  userName: string;
+}
