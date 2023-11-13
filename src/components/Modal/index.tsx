@@ -29,20 +29,16 @@ import {
 import apolloClient from "../../apolloClient";
 import {
   ADD_CONTACT_WITH_PHONES,
-  ADD_NUMBER_TO_CONTACT,
   EDIT_CONTACT,
-  EDIT_PHONE_NUMBER,
   GET_CONTACT_LIST,
 } from "../../apolloClient/queries";
 import { ContactListType } from "../../interface/reducer";
 import {
   checkAllErrors,
-  checkIsError,
   handleCreateResult,
+  handleOnChangeProcess,
   handlePhoneUpdate,
   handleUpdateContactResult,
-  handleUpdatePhoneResult,
-  handleUpdateResult,
 } from "../../utils";
 
 const Modal = ({ refetch }: any) => {
@@ -117,50 +113,21 @@ const Modal = ({ refetch }: any) => {
     value: string,
     currentIndex?: number
   ) => {
-    switch (type) {
-      case "firstName":
-        if (!RegExp(/^[a-z ,.'-]+$/i).test(firstName)) {
-          setFirstNameError(true);
-        } else {
-          setFirstNameError(false);
-        }
-        setFirstName(value);
-        break;
-      case "lastName":
-        if (!RegExp(/^[a-z ,.'-]+$/i).test(lastName)) {
-          setLastNameError(true);
-        } else {
-          setLastNameError(false);
-        }
-        setLastName(value);
-        break;
-      case "phoneNumber":
-        const copyPhoneNumbers = [...phoneNumbers];
-        const newPhoneNumbers = copyPhoneNumbers.map((el, index) => {
-          if (index === currentIndex) {
-            return value;
-          } else {
-            return el;
-          }
-        });
-        const copyPhoneNumbersError = [...phoneNumbersError];
-        const newPhoneNumbersError = copyPhoneNumbersError.map((el, index) => {
-          if (index === currentIndex) {
-            if (!RegExp(/^\+?\d{12}(\d{2})?$/).test(phoneNumbers[index])) {
-              return true;
-            } else {
-              return false;
-            }
-          } else {
-            return el;
-          }
-        });
-        setPhoneNumbersError(newPhoneNumbersError);
-        setPhoneNumbers(newPhoneNumbers);
-        break;
-      default:
-        return true;
-    }
+    handleOnChangeProcess(
+      type,
+      value,
+      firstName,
+      lastName,
+      setFirstNameError,
+      setFirstName,
+      setLastNameError,
+      setLastName,
+      phoneNumbers,
+      phoneNumbersError,
+      setPhoneNumbersError,
+      setPhoneNumbers,
+      currentIndex
+    );
   };
 
   useEffect(() => {

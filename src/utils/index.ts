@@ -331,3 +331,64 @@ export const handlePhoneUpdate = (
     });
   }
 };
+
+export const handleOnChangeProcess = (
+  type: string,
+  value: string,
+  firstName: string,
+  lastName: string,
+  setFirstNameError: (data: boolean) => void,
+  setFirstName: (data: string) => void,
+  setLastNameError: (data: boolean) => void,
+  setLastName: (data: string) => void,
+  phoneNumbers: string[],
+  phoneNumbersError: boolean[],
+  setPhoneNumbersError: (data: boolean[]) => void,
+  setPhoneNumbers: (data: string[]) => void,
+  currentIndex?: number
+) => {
+  switch (type) {
+    case "firstName":
+      if (!RegExp(/^[a-z ,.'-]+$/i).test(firstName)) {
+        setFirstNameError(true);
+      } else {
+        setFirstNameError(false);
+      }
+      setFirstName(value);
+      break;
+    case "lastName":
+      if (!RegExp(/^[a-z ,.'-]+$/i).test(lastName)) {
+        setLastNameError(true);
+      } else {
+        setLastNameError(false);
+      }
+      setLastName(value);
+      break;
+    case "phoneNumber":
+      const copyPhoneNumbers = [...phoneNumbers];
+      const newPhoneNumbers = copyPhoneNumbers.map((el, index) => {
+        if (index === currentIndex) {
+          return value;
+        } else {
+          return el;
+        }
+      });
+      const copyPhoneNumbersError = [...phoneNumbersError];
+      const newPhoneNumbersError = copyPhoneNumbersError.map((el, index) => {
+        if (index === currentIndex) {
+          if (!RegExp(/^\+?\d{12}(\d{2})?$/).test(phoneNumbers[index])) {
+            return true;
+          } else {
+            return false;
+          }
+        } else {
+          return el;
+        }
+      });
+      setPhoneNumbersError(newPhoneNumbersError);
+      setPhoneNumbers(newPhoneNumbers);
+      break;
+    default:
+      return true;
+  }
+};
