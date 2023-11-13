@@ -4,6 +4,20 @@ import Avatar3 from "../assets/image/avatar-3.webp";
 import Avatar4 from "../assets/image/avatar-4.webp";
 import Avatar5 from "../assets/image/avatar-5.webp";
 import Avatar6 from "../assets/image/avatar-6.webp";
+import { RootDispatch } from "../store/store";
+import {
+  ContactListType,
+  CreatePhoneResponseType,
+  CreateResponseType,
+  UpdatePhoneResponseType,
+} from "../interface/reducer";
+import { GraphQLError } from "graphql";
+import { setEditData } from "../store/reducers";
+import { ApolloClient, NormalizedCacheObject } from "@apollo/client";
+import {
+  ADD_NUMBER_TO_CONTACT,
+  EDIT_PHONE_NUMBER,
+} from "../apolloClient/queries";
 
 const size = {
   mobileS: "320px",
@@ -44,4 +58,276 @@ export const randomAvatar = () => {
   };
   const number = Math.floor(Math.random() * 5);
   return options[number];
+};
+
+export const checkIsError = (
+  firstNameError: boolean,
+  lastNameError: boolean,
+  phoneNumbersError: boolean[],
+  firstName: string,
+  lastName: string,
+  phoneNumbers: string[]
+) => {
+  return (
+    firstNameError ||
+    lastNameError ||
+    phoneNumbersError.includes(true) ||
+    firstName === "" ||
+    lastName === "" ||
+    phoneNumbers.includes("") ||
+    !RegExp(/^[a-z ,.'-]+$/i).test(firstName) ||
+    !RegExp(/^[a-z ,.'-]+$/i).test(lastName)
+  );
+};
+
+export const handleCreateResult = (
+  errors: readonly GraphQLError[] | undefined,
+  data: CreateResponseType,
+  createModal: boolean,
+  offset: number,
+  dispatch: RootDispatch,
+  setAddContact: (data: ContactListType) => {
+    payload: any;
+    type: "phonebook/setAddContact";
+  },
+  setOffset: (data: number) => { payload: any; type: "phonebook/setOffset" },
+  refetch: any,
+  setCreateModal: (data: boolean) => {
+    payload: any;
+    type: "phonebook/setCreateModal";
+  },
+  handleReset: () => void
+) => {
+  if (errors) {
+  } else if (data) {
+    if (data?.insert_contact) {
+      if (data?.insert_contact?.returning?.length > 0) {
+        if (createModal) {
+          if (offset === 0) {
+            dispatch(setAddContact(data?.insert_contact?.returning[0]));
+          } else {
+            dispatch(setOffset(0));
+          }
+          refetch({
+            offset: 0,
+          });
+          dispatch(setCreateModal(false));
+          handleReset();
+        }
+      }
+    }
+  }
+};
+
+export const handleUpdateResult = (
+  errors: readonly GraphQLError[] | undefined,
+  data: CreatePhoneResponseType,
+  editModal: boolean,
+  dispatch: RootDispatch,
+  setUpdateData: (data: ContactListType) => {
+    payload: any;
+    type: "phonebook/setUpdateData";
+  },
+  setEditModal: (data: boolean) => {
+    payload: any;
+    type: "phonebook/setEditModal";
+  },
+  handleReset: () => void
+) => {
+  if (errors) {
+  } else if (data) {
+    if (data?.insert_phone) {
+      if (data?.insert_phone?.returning?.length > 0) {
+        if (editModal) {
+          dispatch(setUpdateData(data?.insert_phone?.returning[0]?.contact));
+          dispatch(setEditModal(false));
+          handleReset();
+        }
+      }
+    }
+  }
+};
+
+export const handleUpdatePhoneResult = (
+  errors: readonly GraphQLError[] | undefined,
+  data: UpdatePhoneResponseType,
+  editModal: boolean,
+  dispatch: RootDispatch,
+  setUpdateData: (data: ContactListType) => {
+    payload: any;
+    type: "phonebook/setUpdateData";
+  },
+  setEditModal: (data: boolean) => {
+    payload: any;
+    type: "phonebook/setEditModal";
+  },
+  handleReset: () => void
+) => {
+  if (errors) {
+  } else if (data) {
+    if (data?.update_phone_by_pk) {
+      if (data?.update_phone_by_pk?.contact) {
+        if (editModal) {
+          dispatch(setUpdateData(data?.update_phone_by_pk?.contact));
+          dispatch(setEditModal(false));
+          handleReset();
+        }
+      }
+    }
+  }
+};
+
+export const handleUpdateContactResult = (
+  errors: readonly GraphQLError[] | undefined,
+  data: UpdatePhoneResponseType,
+  editModal: boolean,
+  dispatch: RootDispatch,
+  setEditData: (data: ContactListType) => {
+    payload: any;
+    type: "phonebook/setEditData";
+  },
+  setEditModal: (data: boolean) => {
+    payload: any;
+    type: "phonebook/setEditModal";
+  },
+  handleReset: () => void
+) => {
+  if (errors) {
+  } else if (data) {
+    if (data?.update_phone_by_pk) {
+      if (data?.update_phone_by_pk?.contact) {
+        if (editModal) {
+          dispatch(setEditData(data?.update_phone_by_pk?.contact));
+          dispatch(setEditModal(false));
+          handleReset();
+        }
+      }
+    }
+  }
+};
+
+export const checkAllErrors = (
+  firstNameError: boolean,
+  lastNameError: boolean,
+  phoneNumbersError: boolean[],
+  firstName: string,
+  lastName: string,
+  phoneNumbers: string[],
+  setFirstNameError: (data: boolean) => void,
+  setLastNameError: (data: boolean) => void,
+  setPhoneNumbersError: (data: boolean[]) => void
+) => {
+  if (
+    checkIsError(
+      firstNameError,
+      lastNameError,
+      phoneNumbersError,
+      firstName,
+      lastName,
+      phoneNumbers
+    )
+  ) {
+    if (firstName === "" || !RegExp(/^[a-z ,.'-]+$/i).test(firstName)) {
+      setFirstNameError(true);
+    } else if (lastName === "" || !RegExp(/^[a-z ,.'-]+$/i).test(lastName)) {
+      setLastNameError(true);
+    } else if (phoneNumbers.includes("")) {
+      const copyPhoneNumbersError = [...phoneNumbersError];
+      const newPhoneNumbersError = copyPhoneNumbersError.map((el, index) => {
+        if (!RegExp(/^\+?\d{12}(\d{2})?$/).test(phoneNumbers[index])) {
+          return true;
+        } else {
+          return false;
+        }
+      });
+      setPhoneNumbersError(newPhoneNumbersError);
+    }
+    return;
+  }
+};
+
+export const handlePhoneUpdate = (
+  phoneNumbers: string[],
+  tempData: ContactListType,
+  apolloClient: ApolloClient<NormalizedCacheObject>,
+  editModal: boolean,
+  dispatch: RootDispatch,
+  setUpdateData: (data: ContactListType) => {
+    payload: any;
+    type: "phonebook/setUpdateData";
+  },
+  setEditModal: (data: boolean) => {
+    payload: any;
+    type: "phonebook/setEditModal";
+  },
+  handleReset: () => void
+) => {
+  if (phoneNumbers?.length !== tempData?.phones?.length) {
+    phoneNumbers.forEach(async (el, index) => {
+      if (!tempData.phones[index]) {
+        const { data, errors } = await apolloClient.mutate({
+          mutation: ADD_NUMBER_TO_CONTACT,
+          variables: {
+            contact_id: tempData?.id,
+            phone_number: el,
+          },
+        });
+        handleUpdateResult(
+          errors,
+          data,
+          editModal,
+          dispatch,
+          setUpdateData,
+          setEditModal,
+          handleReset
+        );
+      } else {
+        if (el !== tempData.phones[index].number) {
+          const { data, errors } = await apolloClient.mutate({
+            mutation: EDIT_PHONE_NUMBER,
+            variables: {
+              pk_columns: {
+                number: tempData.phones[index].number,
+                contact_id: tempData?.id,
+              },
+              new_phone_number: el,
+            },
+          });
+          handleUpdatePhoneResult(
+            errors,
+            data,
+            editModal,
+            dispatch,
+            setUpdateData,
+            setEditModal,
+            handleReset
+          );
+        }
+      }
+    });
+  } else {
+    phoneNumbers.forEach(async (el, index) => {
+      if (el !== tempData.phones[index].number) {
+        const { data, errors } = await apolloClient.mutate({
+          mutation: EDIT_PHONE_NUMBER,
+          variables: {
+            pk_columns: {
+              number: tempData.phones[index].number,
+              contact_id: tempData?.id,
+            },
+            new_phone_number: el,
+          },
+        });
+        handleUpdatePhoneResult(
+          errors,
+          data,
+          editModal,
+          dispatch,
+          setUpdateData,
+          setEditModal,
+          handleReset
+        );
+      }
+    });
+  }
 };

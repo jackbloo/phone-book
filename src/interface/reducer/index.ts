@@ -1,3 +1,6 @@
+import { AnyAction } from "@reduxjs/toolkit";
+import { ThunkAction } from "redux-thunk";
+
 export interface InitialState {
   isLogin: boolean;
   contactList: ContactListType[];
@@ -39,4 +42,21 @@ export interface LeftMenuProps {
 
 export interface DeleteModalProps {
   handleRefetch: () => void;
+}
+
+export type ReduxActionType = ThunkAction<
+  unknown,
+  { phoneBook: InitialState },
+  undefined,
+  AnyAction
+>;
+
+export interface CreateResponseType {
+  insert_contact: { returning: ContactListType[] };
+}
+export interface CreatePhoneResponseType {
+  insert_phone: { returning: { contact: ContactListType }[] };
+}
+export interface UpdatePhoneResponseType {
+  update_phone_by_pk: { contact: ContactListType };
 }

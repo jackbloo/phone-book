@@ -35,6 +35,15 @@ import {
   GET_CONTACT_LIST,
 } from "../../apolloClient/queries";
 import { ContactListType } from "../../interface/reducer";
+import {
+  checkAllErrors,
+  checkIsError,
+  handleCreateResult,
+  handlePhoneUpdate,
+  handleUpdateContactResult,
+  handleUpdatePhoneResult,
+  handleUpdateResult,
+} from "../../utils";
 
 const Modal = ({ refetch }: any) => {
   const dispatch = useDispatch();
@@ -57,6 +66,7 @@ const Modal = ({ refetch }: any) => {
         number: "",
       },
     ],
+    created_at: "",
   });
   const onClose = () => {
     if (createModal) {
@@ -98,6 +108,7 @@ const Modal = ({ refetch }: any) => {
           number: "",
         },
       ],
+      created_at: "",
     });
   };
 
@@ -165,33 +176,17 @@ const Modal = ({ refetch }: any) => {
   }, [editModal]);
 
   const handleCreate = async () => {
-    if (
-      firstNameError ||
-      lastNameError ||
-      phoneNumbersError.includes(true) ||
-      firstName === "" ||
-      lastName === "" ||
-      phoneNumbers.includes("") ||
-      !RegExp(/^[a-z ,.'-]+$/i).test(firstName) ||
-      !RegExp(/^[a-z ,.'-]+$/i).test(lastName)
-    ) {
-      if (firstName === "" || !RegExp(/^[a-z ,.'-]+$/i).test(firstName)) {
-        setFirstNameError(true);
-      } else if (lastName === "" || !RegExp(/^[a-z ,.'-]+$/i).test(lastName)) {
-        setLastNameError(true);
-      } else if (phoneNumbers.includes("")) {
-        const copyPhoneNumbersError = [...phoneNumbersError];
-        const newPhoneNumbersError = copyPhoneNumbersError.map((el, index) => {
-          if (!RegExp(/^\+?\d{12}(\d{2})?$/).test(phoneNumbers[index])) {
-            return true;
-          } else {
-            return false;
-          }
-        });
-        setPhoneNumbersError(newPhoneNumbersError);
-      }
-      return;
-    }
+    checkAllErrors(
+      firstNameError,
+      lastNameError,
+      phoneNumbersError,
+      firstName,
+      lastName,
+      phoneNumbers,
+      setFirstNameError,
+      setLastNameError,
+      setPhoneNumbersError
+    );
     const newPhone = phoneNumbers.map((el) => {
       return {
         number: el,
@@ -220,25 +215,18 @@ const Modal = ({ refetch }: any) => {
               phones: newPhone,
             },
           });
-          if (errors) {
-          } else if (data) {
-            if (data?.insert_contact) {
-              if (data?.insert_contact?.returning?.length > 0) {
-                if (createModal) {
-                  if (offset === 0) {
-                    dispatch(setAddContact(data?.insert_contact?.returning[0]));
-                  } else {
-                    dispatch(setOffset(0));
-                  }
-                  refetch({
-                    offset: 0,
-                  });
-                  dispatch(setCreateModal(false));
-                  handleReset();
-                }
-              }
-            }
-          }
+          handleCreateResult(
+            errors,
+            data,
+            createModal,
+            offset,
+            dispatch,
+            setAddContact,
+            setOffset,
+            refetch,
+            setCreateModal,
+            handleReset
+          );
         }
       }
     } else {
@@ -257,87 +245,16 @@ const Modal = ({ refetch }: any) => {
         options["last_name"] = firstName;
         flag = true;
       }
-      if (phoneNumbers?.length !== tempData?.phones?.length) {
-        phoneNumbers.forEach(async (el, index) => {
-          if (!tempData.phones[index]) {
-            const { data, errors } = await apolloClient.mutate({
-              mutation: ADD_NUMBER_TO_CONTACT,
-              variables: {
-                contact_id: tempData?.id,
-                phone_number: el,
-              },
-            });
-            if (errors) {
-            } else if (data) {
-              if (data?.insert_phone) {
-                if (data?.insert_phone?.returning?.length > 0) {
-                  if (editModal) {
-                    dispatch(
-                      setUpdateData(data?.insert_phone?.returning[0]?.contact)
-                    );
-                    dispatch(setEditModal(false));
-                    handleReset();
-                  }
-                }
-              }
-            }
-          } else {
-            if (el !== tempData.phones[index].number) {
-              const { data, errors } = await apolloClient.mutate({
-                mutation: EDIT_PHONE_NUMBER,
-                variables: {
-                  pk_columns: {
-                    number: tempData.phones[index].number,
-                    contact_id: tempData?.id,
-                  },
-                  new_phone_number: el,
-                },
-              });
-              if (errors) {
-              } else if (data) {
-                if (data?.update_phone_by_pk) {
-                  if (data?.update_phone_by_pk?.contact) {
-                    if (editModal) {
-                      dispatch(
-                        setUpdateData(data?.update_phone_by_pk?.contact)
-                      );
-                      dispatch(setEditModal(false));
-                      handleReset();
-                    }
-                  }
-                }
-              }
-            }
-          }
-        });
-      } else {
-        phoneNumbers.forEach(async (el, index) => {
-          if (el !== tempData.phones[index].number) {
-            const { data, errors } = await apolloClient.mutate({
-              mutation: EDIT_PHONE_NUMBER,
-              variables: {
-                pk_columns: {
-                  number: tempData.phones[index].number,
-                  contact_id: tempData?.id,
-                },
-                new_phone_number: el,
-              },
-            });
-            if (errors) {
-            } else if (data) {
-              if (data?.update_phone_by_pk) {
-                if (data?.update_phone_by_pk?.contact) {
-                  if (editModal) {
-                    dispatch(setUpdateData(data?.update_phone_by_pk?.contact));
-                    dispatch(setEditModal(false));
-                    handleReset();
-                  }
-                }
-              }
-            }
-          }
-        });
-      }
+      handlePhoneUpdate(
+        phoneNumbers,
+        tempData as ContactListType,
+        apolloClient,
+        editModal,
+        dispatch,
+        setUpdateData,
+        setEditModal,
+        handleReset
+      );
 
       if (!flag) {
         dispatch(setEditModal(false));
@@ -350,18 +267,15 @@ const Modal = ({ refetch }: any) => {
           ...options,
         },
       });
-      if (errors) {
-      } else if (data) {
-        if (data?.insert_contact) {
-          if (data?.insert_contact?.returning?.length > 0) {
-            if (editModal) {
-              dispatch(setEditData(data?.insert_contact?.returning[0]));
-              dispatch(setEditModal(false));
-              handleReset();
-            }
-          }
-        }
-      }
+      handleUpdateContactResult(
+        errors,
+        data,
+        editModal,
+        dispatch,
+        setEditData,
+        setEditModal,
+        handleReset
+      );
     }
   };
   const showModal: boolean = createModal || editModal;
