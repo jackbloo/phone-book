@@ -4,10 +4,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/store";
 import {
   setCreateModal,
-  setAddContact,
   setEditData,
   setEditModal,
   setUpdateData,
+  setOffset,
+  setAddContact,
 } from "../../store/reducers";
 import {
   ActionContainer,
@@ -37,7 +38,7 @@ import { ContactListType } from "../../interface/reducer";
 
 const Modal = () => {
   const dispatch = useDispatch();
-  const { createModal, editData, editModal } = useSelector(
+  const { createModal, editData, editModal, offset } = useSelector(
     (state: RootState) => state.phoneBook
   );
   const [phoneNumbers, setPhoneNumbers] = useState([""]);
@@ -224,7 +225,12 @@ const Modal = () => {
             if (data?.insert_contact) {
               if (data?.insert_contact?.returning?.length > 0) {
                 if (createModal) {
-                  dispatch(setAddContact(data?.insert_contact?.returning[0]));
+                  if (offset === 0) {
+                    dispatch(setAddContact(data?.insert_contact?.returning[0]));
+                  } else {
+                    dispatch(setOffset(0));
+                  }
+
                   dispatch(setCreateModal(false));
                   handleReset();
                 }

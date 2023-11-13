@@ -15,7 +15,7 @@ export const Container = styled.div`
   font-size: 12px;
   background: white;
   @media ${device.tablet} {
-    justify-content: space-between;
+    justify-content: flex-start;
   }
 `;
 
@@ -25,7 +25,11 @@ export const LeftContent = styled.div`
   justify-content: center;
 `;
 
-export const RightContent = styled.div``;
+export const RightContent = styled.div`
+  @media ${device.tablet} {
+    display: none;
+  }
+`;
 
 export const ImageIcon = styled.img`
   width: ${pixelSize.space_20};

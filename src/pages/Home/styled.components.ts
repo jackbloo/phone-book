@@ -62,21 +62,13 @@ export const MoreButtonContainer = styled.div`
   justify-content: center;
   margin-top: 20px;
   margin-bottom: 20px;
-`;
-export const MoreButton = styled.div`
-  max-width: 100px;
-  padding: 10px;
-  border: 1px solid black;
-  -webkit-box-shadow: 0px 0px 24px -9px rgba(192, 192, 192, 1);
-  -moz-box-shadow: 0px 0px 24px -9px rgba(192, 192, 192, 1);
-  box-shadow: 0px 0px 24px -9px rgba(192, 192, 192, 1);
-  border-radius: 20px;
+  font-weight: 700;
 `;
 
 export const BodyContent = styled.div`
   @media ${device.tablet} {
     display: flex;
-    max-height: 100vh;
+    height: 100vh;
     overflow: hidden;
   }
 `;
@@ -87,4 +79,36 @@ export const RightMenu = styled.div`
     flex-direction: column;
     width: 80%;
   }
+`;
+
+export const ArrowIcon = styled.img`
+  -webkit-box-shadow: 0px 0px 24px -9px rgba(192, 192, 192, 1);
+  -moz-box-shadow: 0px 0px 24px -9px rgba(192, 192, 192, 1);
+  box-shadow: 0px 0px 24px -9px rgba(192, 192, 192, 1);
+  height: 20px;
+  width: 20px;
+`;
+
+export const MoreContainer = styled.div`
+  width: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+export const EmptyContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+`;
+
+export const EmptyImage = styled.img`
+  @media ${device.tablet} {
+    height: 500px;
+    width: 500px;
+  }
+  height: 200px;
+  width: 200px;
 `;

@@ -1,18 +1,9 @@
 import { ApolloClient, InMemoryCache, HttpLink } from "@apollo/client";
-import { offsetLimitPagination } from "@apollo/client/utilities";
 
 const httpLink = new HttpLink({
-  uri: "https://wpe-hiring.tokopedia.net/graphql",
+  uri: import.meta.env.VITE_ENDPOINT,
 });
-const cache = new InMemoryCache({
-  typePolicies: {
-    Query: {
-      fields: {
-        feed: offsetLimitPagination(),
-      },
-    },
-  },
-});
+const cache = new InMemoryCache();
 const apolloClient = new ApolloClient({
   link: httpLink,
   cache,

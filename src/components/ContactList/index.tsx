@@ -32,13 +32,16 @@ import {
 import FavoriteIcon from "../../assets/image/favorite.png";
 import UnfavoriteIcon from "../../assets/image/unfavorite.png";
 
-const ContactListComponent = ({ contactList }: ContactListComponentProps) => {
+const ContactListComponent = ({
+  contactList,
+  favoriteList,
+}: ContactListComponentProps) => {
   const dispatch = useDispatch();
   const handleDelete = (id: number) => {
     dispatch(setDeleteModal(true));
     dispatch(setDeleteId(id));
   };
-  const handleFavorite = (data: ContactListType, type: string) => {
+  const handleFavorite = async (data: ContactListType, type: string) => {
     const copyData = { ...data };
     if (type === "favorite") {
       dispatch(setFavorite({ ...copyData, isFavorite: true }));
@@ -52,56 +55,61 @@ const ContactListComponent = ({ contactList }: ContactListComponentProps) => {
   };
   return (
     <Container>
-      {contactList?.map((el: ContactListType, index: number) => (
-        <Items key={el.id}>
-          <TopContainer>
-            <FavoriteContainer>
-              <FavoriteIcons
-                onClick={(e) =>
-                  handleFavorite(el, el.isFavorite ? "unfavorite" : "favorite")
-                }
-                src={el.isFavorite ? FavoriteIcon : UnfavoriteIcon}
-                alt={el.isFavorite ? "unfavorite" : "favorite" + index}
+      {[...favoriteList, ...contactList]?.map(
+        (el: ContactListType, index: number) => (
+          <Items key={el.id}>
+            <TopContainer>
+              <FavoriteContainer>
+                <FavoriteIcons
+                  onClick={(e) =>
+                    handleFavorite(
+                      el,
+                      el.isFavorite ? "unfavorite" : "favorite"
+                    )
+                  }
+                  src={el.isFavorite ? FavoriteIcon : UnfavoriteIcon}
+                  alt={el.isFavorite ? "unfavorite" : "favorite" + index}
+                />
+              </FavoriteContainer>
+              <Avatar src={el.image} alt={`avatar-${el.id}`} />
+              <Title>{el.first_name + " " + el.last_name}</Title>
+              <Subtitle>
+                {el?.phones?.length > 0 &&
+                  el?.phones
+                    ?.slice(0, 3)
+                    .map((el: PhoneType, index: number) => (
+                      <Text key={index}>{el.number}</Text>
+                    ))}
+                <MoreText>
+                  {el?.phones?.length > 3 &&
+                    `+${el?.phones?.slice(0, 3)?.length} more`}
+                </MoreText>
+              </Subtitle>
+              <SubtitleDesktop>
+                {el?.phones[0].number}
+                <MoreText>
+                  {el?.phones?.length > 3 &&
+                    `  +${el?.phones?.slice(0, 3)?.length} more`}
+                </MoreText>
+              </SubtitleDesktop>
+            </TopContainer>
+
+            <ActionsContainer>
+              <Icon
+                src={DeleteIcon}
+                alt="delete-icon"
+                onClick={(e) => handleDelete(el.id)}
               />
-            </FavoriteContainer>
-            <Avatar src={el.image} alt={`avatar-${el.id}`} />
-            <Title>{el.first_name + " " + el.last_name}</Title>
-            <Subtitle>
-              {el?.phones?.length > 0 &&
-                el?.phones
-                  ?.slice(0, 3)
-                  .map((el: PhoneType, index: number) => (
-                    <Text key={index}>{el.number}</Text>
-                  ))}
-              <MoreText>
-                {el?.phones?.length > 3 &&
-                  `+${el?.phones?.slice(0, 3)?.length} more`}
-              </MoreText>
-            </Subtitle>
-            <SubtitleDesktop>
-              {el?.phones[0].number}
-              <MoreText>
-                {el?.phones?.length > 3 &&
-                  `  +${el?.phones?.slice(0, 3)?.length} more`}
-              </MoreText>
-            </SubtitleDesktop>
-          </TopContainer>
 
-          <ActionsContainer>
-            <Icon
-              src={DeleteIcon}
-              alt="delete-icon"
-              onClick={(e) => handleDelete(el.id)}
-            />
-
-            <Icon
-              src={EditIcon}
-              alt="edit-icon"
-              onClick={(e) => handleEdit(el)}
-            />
-          </ActionsContainer>
-        </Items>
-      ))}
+              <Icon
+                src={EditIcon}
+                alt="edit-icon"
+                onClick={(e) => handleEdit(el)}
+              />
+            </ActionsContainer>
+          </Items>
+        )
+      )}
     </Container>
   );
 };

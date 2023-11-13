@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import { keyframes } from "@emotion/react";
 import { pixelSize } from "../../utils/constants";
+import { device } from "../../utils";
 
 export const Container = styled.div`
   height: ${pixelSize.fullHeight};
@@ -58,7 +59,7 @@ export const ErrorContainer = styled.div`
   align-items: flex-start;
 `;
 const typing = keyframes`
-  from { width: 0 }   to { width: 50% }
+  from { width: 0 }   to { width: 30% }
 `;
 
 const blinkCaret = keyframes`
@@ -66,7 +67,7 @@ const blinkCaret = keyframes`
   50% { border-color: orange; }`;
 
 export const Title = styled.div`
-  font-size: 20px;
+  font-size: 14px;
   font-weight: 700;
   color: black;
   margin-bottom: 10px;
@@ -77,4 +78,7 @@ export const Title = styled.div`
   letter-spacing: 0.15em;
   animation: ${typing} 3.5s steps(40, end),
     ${blinkCaret} 0.75s step-end infinite;
+  @media ${device.tablet} {
+    font-size: 20px;
+  }
 `;

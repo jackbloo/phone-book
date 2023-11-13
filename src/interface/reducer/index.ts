@@ -11,6 +11,8 @@ export interface InitialState {
   createModal: boolean;
   editModal: boolean;
   editData: ContactListType | null;
+  favoriteList: ContactListType[];
+  tempContactList: ContactListType[];
 }
 export interface ContactListType {
   created_at: string;
@@ -28,8 +30,13 @@ export interface PhoneType {
 
 export interface ContactListComponentProps {
   contactList: ContactListType[];
+  favoriteList: ContactListType[];
 }
 
 export interface LeftMenuProps {
   userName: string;
+}
+
+export interface DeleteModalProps {
+  handleRefetch: () => void;
 }

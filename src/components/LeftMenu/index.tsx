@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React from "react";
 import {
   Avatar,
   TitleContainer,
@@ -19,11 +19,11 @@ import { setLogout } from "../../store/reducers";
 const LeftMenu = ({ userName }: LeftMenuProps) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const handleLogout = useCallback(() => {
+  const handleLogout = () => {
     localStorage.removeItem("phonebookPersistanceState");
     dispatch(setLogout());
     navigate("/");
-  }, [dispatch, navigate]);
+  };
   return (
     <Container>
       <TopContainer>

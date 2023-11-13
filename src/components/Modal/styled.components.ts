@@ -17,13 +17,11 @@ export const ModalContainer = styled.div`
 
 export const ModalContent = styled.div`
   width: 300px;
-  height: 40%;
   background-color: white;
   color: #fff;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
   font-size: 2rem;
   border-radius: 20px;
   padding: 15px;

@@ -17,8 +17,9 @@ import {
 } from "./styled.components";
 import apolloClient from "../../apolloClient";
 import { DELETE_CONTACT_PHONE } from "../../apolloClient/queries";
+import { DeleteModalProps } from "../../interface/reducer";
 
-const DeleteModal = () => {
+const DeleteModal = ({ handleRefetch }: DeleteModalProps) => {
   const dispatch = useDispatch();
   const { deleteModalVisible, deleteId } = useSelector(
     (state: RootState) => state.phoneBook
@@ -36,6 +37,7 @@ const DeleteModal = () => {
       },
     });
     if (data) {
+      handleRefetch();
       dispatch(setDeleteData(deleteId));
       dispatch(setDeleteModal(false));
     }
