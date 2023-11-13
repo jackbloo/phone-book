@@ -132,34 +132,39 @@ export const phonebookSlice = createSlice({
       state.editData = payload;
     },
     setUpdateData: (state, { payload }) => {
-      const copyContactList = [...state.tempContactList];
-      const updateContactList = copyContactList.map((el) => {
-        if (el.id === payload?.id) {
-          return {
-            ...el,
-            first_name: payload?.first_name,
-            last_name: payload?.last_name,
-            phones: payload?.phones,
-          };
-        } else {
-          return el;
-        }
-      });
-      const copyFavoriteList = [...state.favoriteList];
-      const updateFavoriteList = copyFavoriteList.map((el) => {
-        if (el.id === payload?.id) {
-          return {
-            ...el,
-            first_name: payload?.first_name,
-            last_name: payload?.last_name,
-            phones: payload?.phones,
-          };
-        } else {
-          return el;
-        }
-      });
-      state.contactList = [...updateContactList];
-      state.favoriteList = [...updateFavoriteList];
+      const copyContactList = [...state.contactList];
+      const ids = new Set(copyContactList.map((el) => el.id));
+      if (ids.has(payload?.id)) {
+        const updateContactList = copyContactList.map((el) => {
+          if (el.id === payload?.id) {
+            return {
+              ...el,
+              first_name: payload?.first_name,
+              last_name: payload?.last_name,
+              phones: payload?.phones,
+            };
+          } else {
+            return el;
+          }
+        });
+        state.contactList = [...updateContactList];
+      } else {
+        const copyFavoriteList = [...state.favoriteList];
+        const updateFavoriteList = copyFavoriteList.map((el) => {
+          if (el.id === payload?.id) {
+            return {
+              ...el,
+              first_name: payload?.first_name,
+              last_name: payload?.last_name,
+              phones: payload?.phones,
+            };
+          } else {
+            return el;
+          }
+        });
+
+        state.favoriteList = [...updateFavoriteList];
+      }
     },
     setLogout: (state) => {
       state.contactList = [];
