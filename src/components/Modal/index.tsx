@@ -209,7 +209,7 @@ const Modal = ({ refetch }: any) => {
         flag = true;
       }
       if (lastName !== tempData?.last_name) {
-        options["last_name"] = firstName;
+        options._set.last_name = lastName;
         flag = true;
       }
       handlePhoneUpdate(
