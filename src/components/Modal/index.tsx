@@ -36,7 +36,7 @@ import {
 } from "../../apolloClient/queries";
 import { ContactListType } from "../../interface/reducer";
 
-const Modal = () => {
+const Modal = ({ refetch }: any) => {
   const dispatch = useDispatch();
   const { createModal, editData, editModal, offset } = useSelector(
     (state: RootState) => state.phoneBook
@@ -230,7 +230,9 @@ const Modal = () => {
                   } else {
                     dispatch(setOffset(0));
                   }
-
+                  refetch({
+                    offset: 0,
+                  });
                   dispatch(setCreateModal(false));
                   handleReset();
                 }

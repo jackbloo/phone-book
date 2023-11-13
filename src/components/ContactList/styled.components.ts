@@ -2,23 +2,26 @@ import styled from "@emotion/styled";
 import { device } from "../../utils";
 
 export const Container = styled.div`
-  display: flex;
-  flex-direction: row;
-  overflow: hidden;
-  flex-wrap: wrap;
-  justify-content: space-around;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 150px));
+  grid-column-gap: 40px;
+  grid-row-gap: 10px;
+  justify-content: center;
   @media ${device.tablet} {
+    display: flex;
     flex-direction: column;
     height: calc(90vh + 40px);
     overflow-y: scroll;
     flex-wrap: nowrap;
     justify-content: flex-start;
+    margin-left: 10px;
+    width: 100%;
   }
 `;
 
 export const Items = styled.div`
   position: relative;
-  height: 220px;
+  height: 240px;
   width: 150px;
   -webkit-box-shadow: 0px 0px 24px -9px rgba(192, 192, 192, 1);
   -moz-box-shadow: 0px 0px 24px -9px rgba(192, 192, 192, 1);
@@ -30,8 +33,6 @@ export const Items = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  margin-left: 10px;
-  margin-right: 10px;
   @media ${device.tablet} {
     width: 95%;
     flex-direction: row;
@@ -46,7 +47,7 @@ export const Title = styled.div`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 150px;
+  max-width: 100px;
   @media ${device.tablet} {
     margin-left: 20px;
     width: 150px;

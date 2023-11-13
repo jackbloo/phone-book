@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import {
   Avatar,
   TitleContainer,
@@ -38,6 +38,7 @@ const LeftMenu = ({ userName }: LeftMenuProps) => {
           <LogoutAvatar
             src={LogoutIcon}
             alt="dummy-avatar"
+            data-testid="logout"
             onClick={(e) => handleLogout()}
           />
         </Logout>
@@ -46,4 +47,4 @@ const LeftMenu = ({ userName }: LeftMenuProps) => {
   );
 };
 
-export default React.memo(LeftMenu);
+export default memo(LeftMenu);

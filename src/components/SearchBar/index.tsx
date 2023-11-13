@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo, useCallback } from "react";
 import { Input, InputContainer } from "./styled.components";
 import debounce from "lodash.debounce";
 import { useDispatch } from "react-redux";
@@ -7,7 +7,7 @@ import { setSearchBar } from "../../store/reducers";
 const SearchBar = () => {
   const dispatch = useDispatch();
   const [value, setValue] = useState("");
-  const debouncedSearch = React.useMemo(
+  const debouncedSearch = useMemo(
     () =>
       debounce((val) => {
         dispatch(setSearchBar(val));
@@ -15,7 +15,7 @@ const SearchBar = () => {
     [dispatch]
   );
 
-  const handleChange = React.useCallback(
+  const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       setValue(e.target.value);
       debouncedSearch(e.target.value);
@@ -23,10 +23,11 @@ const SearchBar = () => {
     [debouncedSearch]
   );
   return (
-    <InputContainer>
+    <InputContainer data-testid="input-container">
       <Input
         onChange={(e) => handleChange(e)}
         placeholder="Search by First Name"
+        data-testid="input"
       />
     </InputContainer>
   );

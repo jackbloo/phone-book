@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { ContactListType, InitialState } from "../../interface/reducer";
 import { randomAvatar } from "../../utils";
 
-const initialState: InitialState = {
+export const initialState: InitialState = {
   isLogin: false,
   limit: 10,
   offset: 0,

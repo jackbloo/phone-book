@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, memo } from "react";
 import {
   Container,
   LeftContent,
@@ -6,6 +6,7 @@ import {
   ImageIcon,
 } from "./styled.components";
 import BookIcon from "../../assets/image/Phonebook.webp";
+import LogoutIcon from "../../assets/image/logout-black.svg";
 import { useNavigate } from "react-router-dom";
 import { setLogout } from "../../store/reducers";
 import { RootDispatch } from "../../store/store";
@@ -31,7 +32,17 @@ const Navbar = ({
         YourPhoneBook
       </LeftContent>
       {isLogin ? (
-        <RightContent onClick={(e) => handleLogout()}>Logout</RightContent>
+        <RightContent
+          onClick={(e) => handleLogout()}
+          data-testid="logout-navbar"
+        >
+          {" "}
+          <ImageIcon
+            src={LogoutIcon}
+            alt="logout-icon"
+            data-testid="logout-icon"
+          />
+        </RightContent>
       ) : (
         <div></div>
       )}
@@ -39,4 +50,4 @@ const Navbar = ({
   );
 };
 
-export default React.memo(Navbar);
+export default memo(Navbar);

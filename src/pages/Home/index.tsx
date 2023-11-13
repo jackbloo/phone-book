@@ -31,6 +31,7 @@ import Modal from "../../components/Modal";
 import LeftMenu from "../../components/LeftMenu";
 import Arrow from "../../assets/image/arrow.webp";
 import Empty from "../../assets/image/emptyData.webp";
+import Shimmer from "../../components/Shimmer";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -84,15 +85,11 @@ const Home = () => {
       dispatch(setOffset(offset - limit));
     }
   };
-
-  const handleRefetch = () => {
-    refetch();
-  };
   return (
     <Container>
       <PlusButton onClick={(e) => dispatch(setCreateModal(true))}>+</PlusButton>
-      <DeleteModal handleRefetch={handleRefetch} />
-      <Modal />
+      <DeleteModal handleRefetch={refetch} />
+      <Modal refetch={refetch} />
       <Navbar dispatch={dispatch} isLogin={isLogin} />
       <BodyContent>
         <LeftMenu userName={userName} />
@@ -104,11 +101,11 @@ const Home = () => {
           <SearchBar />
           <ContentContainer>Contact List</ContentContainer>
           {loading ? (
-            <>loading</>
+            <Shimmer />
           ) : (
             <>
               {" "}
-              {contactList?.length === 0 ? (
+              {tempContactList?.length === 0 ? (
                 <EmptyContainer>
                   <EmptyImage src={Empty} alt="empty-image" />
                   No Data Found
@@ -119,7 +116,7 @@ const Home = () => {
                   favoriteList={favoriteList}
                 />
               )}
-              {!loading && !error && contactList.length > 0 && (
+              {!loading && !error && tempContactList.length > 0 && (
                 <MoreButtonContainer>
                   <MoreContainer>
                     {tempContactList?.length <= limit && offset > 0 && (
