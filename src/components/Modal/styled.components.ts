@@ -84,13 +84,13 @@ export const TopContent = styled.div`
 
 export const ExtraButton = styled.div`
   color: blue;
-  font-size: 10px;
+  font-size: 12px;
   text-align: center;
 `;
 
 export const RemovePhoneNumber = styled.span`
   color: red;
-  font-size: 10px;
+  font-size: 12px;
 `;
 
 export const PhoneNumberContainer = styled.div`
