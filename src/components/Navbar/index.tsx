@@ -5,7 +5,7 @@ import {
   RightContent,
   ImageIcon,
 } from "./styled.components";
-import BookIcon from "../../assets/image/phoneBook.webp";
+import BookIcon from "../../assets/image/Phonebook.webp";
 import { useNavigate } from "react-router-dom";
 import { setLogout } from "../../store/reducers";
 import { RootDispatch } from "../../store/store";
