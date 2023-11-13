@@ -19,8 +19,8 @@ import {
   Text,
 } from "./styled.components";
 import { Avatar } from "./styled.components";
-import EditIcon from "../../assets/image/edit.png";
-import DeleteIcon from "../../assets/image/delete.png";
+import EditIcon from "../../assets/image/edit.webp";
+import DeleteIcon from "../../assets/image/delete.webp";
 import { useDispatch } from "react-redux";
 import {
   setDeleteId,
@@ -29,8 +29,8 @@ import {
   setEditModal,
   setFavorite,
 } from "../../store/reducers";
-import FavoriteIcon from "../../assets/image/favorite.png";
-import UnfavoriteIcon from "../../assets/image/unfavorite.png";
+import FavoriteIcon from "../../assets/image/favorite.webp";
+import UnfavoriteIcon from "../../assets/image/unfavorite.webp";
 
 const ContactListComponent = ({
   contactList,

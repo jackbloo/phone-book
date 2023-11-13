@@ -1,9 +1,9 @@
-import Avatar1 from "../assets/image/avatar-1.png";
-import Avatar2 from "../assets/image/avatar-2.png";
-import Avatar3 from "../assets/image/avatar-3.png";
-import Avatar4 from "../assets/image/avatar-4.png";
-import Avatar5 from "../assets/image/avatar-5.png";
-import Avatar6 from "../assets/image/avatar-6.png";
+import Avatar1 from "../assets/image/avatar-1.webp";
+import Avatar2 from "../assets/image/avatar-2.webp";
+import Avatar3 from "../assets/image/avatar-3.webp";
+import Avatar4 from "../assets/image/avatar-4.webp";
+import Avatar5 from "../assets/image/avatar-5.webp";
+import Avatar6 from "../assets/image/avatar-6.webp";
 
 const size = {
   mobileS: "320px",
