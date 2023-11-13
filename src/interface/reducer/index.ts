@@ -60,3 +60,6 @@ export interface CreatePhoneResponseType {
 export interface UpdatePhoneResponseType {
   update_phone_by_pk: { contact: ContactListType };
 }
+export interface UpdateContactResponseType {
+  update_contact_by_pk: ContactListType;
+}

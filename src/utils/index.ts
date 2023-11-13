@@ -9,10 +9,10 @@ import {
   ContactListType,
   CreatePhoneResponseType,
   CreateResponseType,
+  UpdateContactResponseType,
   UpdatePhoneResponseType,
 } from "../interface/reducer";
 import { GraphQLError } from "graphql";
-import { setEditData } from "../store/reducers";
 import { ApolloClient, NormalizedCacheObject } from "@apollo/client";
 import {
   ADD_NUMBER_TO_CONTACT,
@@ -179,7 +179,7 @@ export const handleUpdatePhoneResult = (
 
 export const handleUpdateContactResult = (
   errors: readonly GraphQLError[] | undefined,
-  data: UpdatePhoneResponseType,
+  data: UpdateContactResponseType,
   editModal: boolean,
   dispatch: RootDispatch,
   setEditData: (data: ContactListType) => {
@@ -194,10 +194,10 @@ export const handleUpdateContactResult = (
 ) => {
   if (errors) {
   } else if (data) {
-    if (data?.update_phone_by_pk) {
-      if (data?.update_phone_by_pk?.contact) {
+    if (data?.update_contact_by_pk) {
+      if (data?.update_contact_by_pk) {
         if (editModal) {
-          dispatch(setEditData(data?.update_phone_by_pk?.contact));
+          dispatch(setEditData(data?.update_contact_by_pk));
           dispatch(setEditModal(false));
           handleReset();
         }
