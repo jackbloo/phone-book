@@ -35,7 +35,7 @@ Welcome to Phonebook - Your Digital Phone Directory
 
 In a world that thrives on connections, managing your contacts efficiently is paramount. Introducing Phonebook, your comprehensive solution for organizing and accessing your contacts seamlessly. Whether you're a busy professional, a social butterfly, or someone who simply values an organized digital life, our phone book web application is designed with you in mind.
 
-\*Why Choose PhoneBook?\*\*
+**Why Choose PhoneBook?**
 
 **User-Friendly Interface**: We believe in simplicity. Navigate through your phone book effortlessly, whether you're a tech enthusiast or a casual user.
 
