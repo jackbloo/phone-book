@@ -18,6 +18,7 @@ import {
 import apolloClient from "../../apolloClient";
 import { DELETE_CONTACT_PHONE } from "../../apolloClient/queries";
 import { DeleteModalProps } from "../../interface/reducer";
+import { toast } from "react-toastify";
 
 const DeleteModal = ({ handleRefetch }: DeleteModalProps) => {
   const dispatch = useDispatch();
@@ -30,16 +31,19 @@ const DeleteModal = ({ handleRefetch }: DeleteModalProps) => {
   };
 
   const handleDelete = async () => {
-    const { data } = await apolloClient.mutate({
+    const { data, errors } = await apolloClient.mutate({
       mutation: DELETE_CONTACT_PHONE,
       variables: {
         id: deleteId,
       },
     });
     if (data) {
+      toast.success("Successfully delete contact");
       handleRefetch();
       dispatch(setDeleteData(deleteId));
       dispatch(setDeleteModal(false));
+    } else if (errors) {
+      toast.error("Failed to delete contact");
     }
   };
 

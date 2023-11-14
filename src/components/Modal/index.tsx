@@ -40,6 +40,7 @@ import {
   handlePhoneUpdate,
   handleUpdateContactResult,
 } from "../../utils";
+import { toast } from "react-toastify";
 
 const Modal = ({ refetch }: any) => {
   const dispatch = useDispatch();
@@ -138,111 +139,119 @@ const Modal = ({ refetch }: any) => {
       const tempPhones = editData?.phones?.map((el) => {
         return el.number;
       });
+      const tempError = editData?.phones?.map((el) => {
+        return false;
+      });
       setPhoneNumbers(tempPhones);
+      setPhoneNumbersError(tempError);
     }
   }, [editModal]);
 
   const handleCreate = async () => {
-    checkAllErrors(
-      firstNameError,
-      lastNameError,
-      phoneNumbersError,
-      firstName,
-      lastName,
-      phoneNumbers,
-      setFirstNameError,
-      setLastNameError,
-      setPhoneNumbersError
-    );
-    const newPhone = phoneNumbers.map((el) => {
-      return {
-        number: el,
-      };
-    });
-
-    if (createModal) {
-      const { data: allData, errors: getError } = await apolloClient.query({
-        query: GET_CONTACT_LIST,
-      });
-      if (getError) {
-      } else if (allData) {
-        const allNames = new Set(
-          allData?.contact?.map((el: ContactListType) =>
-            el.first_name.toLocaleLowerCase()
-          )
-        );
-        if (allNames.has(firstName)) {
-          setDuplicateNameError(true);
-        } else {
-          const { data, errors } = await apolloClient.mutate({
-            mutation: ADD_CONTACT_WITH_PHONES,
-            variables: {
-              first_name: firstName,
-              last_name: lastName,
-              phones: newPhone,
-            },
-          });
-          handleCreateResult(
-            errors,
-            data,
-            createModal,
-            offset,
-            dispatch,
-            setAddContact,
-            setOffset,
-            refetch,
-            setCreateModal,
-            handleReset
-          );
-        }
-      }
-    } else {
-      let flag = false;
-      let options: {
-        [key: string]: string | number | any;
-      } = {
-        id: tempData?.id,
-        _set: {},
-      };
-      if (firstName !== tempData?.first_name) {
-        options._set.first_name = firstName;
-        flag = true;
-      }
-      if (lastName !== tempData?.last_name) {
-        options._set.last_name = lastName;
-        flag = true;
-      }
-      handlePhoneUpdate(
+    try {
+      checkAllErrors(
+        firstNameError,
+        lastNameError,
+        phoneNumbersError,
+        firstName,
+        lastName,
         phoneNumbers,
-        tempData as ContactListType,
-        apolloClient,
-        editModal,
-        dispatch,
-        setUpdateData,
-        setEditModal,
-        handleReset
+        setFirstNameError,
+        setLastNameError,
+        setPhoneNumbersError
       );
-
-      if (!flag) {
-        dispatch(setEditModal(false));
-        handleReset();
-        return;
-      }
-      const { data, errors } = await apolloClient.mutate({
-        mutation: EDIT_CONTACT,
-        variables: {
-          ...options,
-        },
+      const newPhone = phoneNumbers.map((el) => {
+        return {
+          number: el,
+        };
       });
-      handleUpdateContactResult(
-        errors,
-        data,
-        editModal,
-        dispatch,
-        setEditData,
-        setEditModal,
-        handleReset
-      );
+
+      if (createModal) {
+        const { data: allData, errors: getError } = await apolloClient.query({
+          query: GET_CONTACT_LIST,
+        });
+        if (getError) {
+        } else if (allData) {
+          const allNames = new Set(
+            allData?.contact?.map((el: ContactListType) =>
+              el.first_name.toLocaleLowerCase()
+            )
+          );
+          if (allNames.has(firstName)) {
+            setDuplicateNameError(true);
+          } else {
+            const { data, errors } = await apolloClient.mutate({
+              mutation: ADD_CONTACT_WITH_PHONES,
+              variables: {
+                first_name: firstName,
+                last_name: lastName,
+                phones: newPhone,
+              },
+            });
+            handleCreateResult(
+              errors,
+              data,
+              createModal,
+              offset,
+              dispatch,
+              setAddContact,
+              setOffset,
+              refetch,
+              setCreateModal,
+              handleReset
+            );
+          }
+        }
+      } else {
+        let flag = false;
+        let options: {
+          [key: string]: string | number | any;
+        } = {
+          id: tempData?.id,
+          _set: {},
+        };
+        if (firstName !== tempData?.first_name) {
+          options._set.first_name = firstName;
+          flag = true;
+        }
+        if (lastName !== tempData?.last_name) {
+          options._set.last_name = lastName;
+          flag = true;
+        }
+        handlePhoneUpdate(
+          phoneNumbers,
+          tempData as ContactListType,
+          apolloClient,
+          editModal,
+          dispatch,
+          setUpdateData,
+          setEditModal,
+          handleReset
+        );
+
+        if (!flag) {
+          dispatch(setEditModal(false));
+          handleReset();
+          return;
+        }
+        const { data, errors } = await apolloClient.mutate({
+          mutation: EDIT_CONTACT,
+          variables: {
+            ...options,
+          },
+        });
+        handleUpdateContactResult(
+          errors,
+          data,
+          editModal,
+          dispatch,
+          setEditData,
+          setEditModal,
+          handleReset
+        );
+      }
+    } catch (error: any) {
+      toast.error(error?.message);
     }
   };
   const showModal: boolean = createModal || editModal;

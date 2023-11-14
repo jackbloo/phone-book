@@ -32,10 +32,14 @@ import LeftMenu from "../../components/LeftMenu";
 import Arrow from "../../assets/image/arrow.webp";
 import Empty from "../../assets/image/emptyData.webp";
 import Shimmer from "../../components/Shimmer";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Home = () => {
   const dispatch = useDispatch();
-  const [options, setOptions] = useState({});
+  const [options, setOptions] = useState<any>({
+    order_by: { created_at: "desc" },
+  });
   const {
     limit,
     offset,
@@ -56,19 +60,19 @@ const Home = () => {
   });
 
   useEffect(() => {
-    setOptions(
-      search === ""
-        ? {
-            order_by: { created_at: "desc" },
-          }
-        : {
-            where: {
-              first_name: { _like: `%${search}%` },
-            },
-            offset: 0,
-            order_by: { created_at: "desc" },
-          }
-    );
+    if (search === "" && options.where) {
+      setOptions({
+        order_by: { created_at: "desc" },
+      });
+    } else if (search !== "") {
+      setOptions({
+        where: {
+          first_name: { _like: `%${search}%` },
+        },
+        offset: 0,
+        order_by: { created_at: "desc" },
+      });
+    }
   }, [search]);
 
   useEffect(() => {
@@ -87,6 +91,7 @@ const Home = () => {
   };
   return (
     <Container>
+      <ToastContainer />
       <PlusButton onClick={(e) => dispatch(setCreateModal(true))}>+</PlusButton>
       <DeleteModal handleRefetch={refetch} />
       <Modal refetch={refetch} />

@@ -18,6 +18,7 @@ import {
   ADD_NUMBER_TO_CONTACT,
   EDIT_PHONE_NUMBER,
 } from "../apolloClient/queries";
+import { toast } from "react-toastify";
 
 const size = {
   mobileS: "320px",
@@ -98,11 +99,11 @@ export const handleCreateResult = (
   },
   handleReset: () => void
 ) => {
-  if (errors) {
-  } else if (data) {
+  if (data) {
     if (data?.insert_contact) {
       if (data?.insert_contact?.returning?.length > 0) {
         if (createModal) {
+          toast.success("Successfully add new contact");
           if (offset === 0) {
             dispatch(setAddContact(data?.insert_contact?.returning[0]));
           } else {
@@ -113,10 +114,12 @@ export const handleCreateResult = (
           });
           dispatch(setCreateModal(false));
           handleReset();
+          return;
         }
       }
     }
   }
+  throw new Error("Failed to add new contact");
 };
 
 export const handleUpdateResult = (
@@ -134,18 +137,19 @@ export const handleUpdateResult = (
   },
   handleReset: () => void
 ) => {
-  if (errors) {
-  } else if (data) {
+  if (data) {
     if (data?.insert_phone) {
       if (data?.insert_phone?.returning?.length > 0) {
         if (editModal) {
           dispatch(setUpdateData(data?.insert_phone?.returning[0]?.contact));
           dispatch(setEditModal(false));
           handleReset();
+          return;
         }
       }
     }
   }
+  throw new Error("Failed to add new phone number");
 };
 
 export const handleUpdatePhoneResult = (
@@ -163,18 +167,20 @@ export const handleUpdatePhoneResult = (
   },
   handleReset: () => void
 ) => {
-  if (errors) {
-  } else if (data) {
+  if (data) {
     if (data?.update_phone_by_pk) {
       if (data?.update_phone_by_pk?.contact) {
         if (editModal) {
+          toast.success("Successfully update phone number of contact");
           dispatch(setUpdateData(data?.update_phone_by_pk?.contact));
           dispatch(setEditModal(false));
           handleReset();
+          return;
         }
       }
     }
   }
+  throw new Error("Failed to update new phone number");
 };
 
 export const handleUpdateContactResult = (
@@ -192,18 +198,20 @@ export const handleUpdateContactResult = (
   },
   handleReset: () => void
 ) => {
-  if (errors) {
-  } else if (data) {
+  if (data) {
     if (data?.update_contact_by_pk) {
       if (data?.update_contact_by_pk) {
         if (editModal) {
+          toast.success("Successfully update contact");
           dispatch(setEditData(data?.update_contact_by_pk));
           dispatch(setEditModal(false));
           handleReset();
+          return;
         }
       }
     }
   }
+  throw new Error("Failed to update contact");
 };
 
 export const checkAllErrors = (
@@ -229,20 +237,27 @@ export const checkAllErrors = (
   ) {
     if (firstName === "" || !RegExp(/^[a-z ,.'-]+$/i).test(firstName)) {
       setFirstNameError(true);
+      throw new Error("Please insert correct first name");
     } else if (lastName === "" || !RegExp(/^[a-z ,.'-]+$/i).test(lastName)) {
       setLastNameError(true);
-    } else if (phoneNumbers.includes("")) {
+      throw new Error("Please insert correct last name");
+    } else if (phoneNumbers) {
       const copyPhoneNumbersError = [...phoneNumbersError];
       const newPhoneNumbersError = copyPhoneNumbersError.map((el, index) => {
-        if (!RegExp(/^\+?\d{12}(\d{2})?$/).test(phoneNumbers[index])) {
+        if (
+          !RegExp(/^08[0-9]{9,}$/).test(phoneNumbers[index]) ||
+          phoneNumbers[index] === ""
+        ) {
           return true;
         } else {
           return false;
         }
       });
-      setPhoneNumbersError(newPhoneNumbersError);
+      if (newPhoneNumbersError.includes(true)) {
+        setPhoneNumbersError(newPhoneNumbersError);
+        throw new Error("Please insert correct phone number");
+      }
     }
-    return;
   }
 };
 
@@ -376,7 +391,7 @@ export const handleOnChangeProcess = (
       const copyPhoneNumbersError = [...phoneNumbersError];
       const newPhoneNumbersError = copyPhoneNumbersError.map((el, index) => {
         if (index === currentIndex) {
-          if (!RegExp(/^\+?\d{12}(\d{2})?$/).test(phoneNumbers[index])) {
+          if (!RegExp(/^08[0-9]{9,}$/).test(phoneNumbers[index])) {
             return true;
           } else {
             return false;
