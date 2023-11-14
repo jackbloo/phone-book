@@ -33,7 +33,7 @@ const Navbar = ({
       </LeftContent>
       {isLogin ? (
         <RightContent
-          onClick={(e) => handleLogout()}
+          onClick={() => handleLogout()}
           data-testid="logout-navbar"
         >
           {" "}

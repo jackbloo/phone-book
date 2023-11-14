@@ -6,6 +6,8 @@ import {
   ContentContainer,
   EmptyContainer,
   EmptyImage,
+  ErrorContainer,
+  ImageError,
   MoreButtonContainer,
   MoreContainer,
   PlusButton,
@@ -31,12 +33,17 @@ import Modal from "../../components/Modal";
 import LeftMenu from "../../components/LeftMenu";
 import Arrow from "../../assets/image/arrow.webp";
 import Empty from "../../assets/image/emptyData.webp";
+import ErrorImage from "../../assets/image/error.webp";
 import Shimmer from "../../components/Shimmer";
 import { ToastContainer } from "react-toastify";
 
 const Home = () => {
   const dispatch = useDispatch();
-  const [options, setOptions] = useState<any>({
+  const [options, setOptions] = useState<{
+    order_by: { created_at: string };
+    where?: { first_name: { _like: string } };
+    offset?: number;
+  }>({
     order_by: { created_at: "desc" },
   });
   const {
@@ -92,7 +99,7 @@ const Home = () => {
       <ToastContainer />
       <PlusButton
         data-testid="click-create-modal"
-        onClick={(e) => dispatch(setCreateModal(true))}
+        onClick={() => dispatch(setCreateModal(true))}
       >
         +
       </PlusButton>
@@ -112,8 +119,12 @@ const Home = () => {
             <Shimmer />
           ) : (
             <>
-              {" "}
-              {tempContactList?.length === 0 ? (
+              {error ? (
+                <ErrorContainer>
+                  <ImageError src={ErrorImage} alt="error-image" />
+                  Oops! Something went wrong!
+                </ErrorContainer>
+              ) : tempContactList?.length === 0 ? (
                 <EmptyContainer>
                   <EmptyImage src={Empty} alt="empty-image" />
                   No Data Found

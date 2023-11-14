@@ -61,7 +61,7 @@ const ContactListComponent = ({
             <TopContainer>
               <FavoriteContainer>
                 <FavoriteIcons
-                  onClick={(e) =>
+                  onClick={() =>
                     handleFavorite(
                       el,
                       el.isFavorite ? "unfavorite" : "favorite"
@@ -101,14 +101,14 @@ const ContactListComponent = ({
               <Icon
                 src={DeleteIcon}
                 alt="delete-icon"
-                onClick={(e) => handleDelete(el.id)}
+                onClick={() => handleDelete(el.id)}
                 data-testid={`delete-${index}`}
               />
 
               <Icon
                 src={EditIcon}
                 alt="edit-icon"
-                onClick={(e) => handleEdit(el)}
+                onClick={() => handleEdit(el)}
                 data-testid={`edit-${index}`}
               />
             </ActionsContainer>

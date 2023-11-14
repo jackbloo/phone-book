@@ -1,5 +1,4 @@
 import styled from "@emotion/styled";
-import { device } from "../../utils";
 
 export const ModalContainer = styled.div`
   position: fixed;

@@ -39,7 +39,7 @@ const LeftMenu = ({ userName }: LeftMenuProps) => {
             src={LogoutIcon}
             alt="dummy-avatar"
             data-testid="logout"
-            onClick={(e) => handleLogout()}
+            onClick={() => handleLogout()}
           />
         </Logout>
       </BottomContainer>

@@ -102,6 +102,9 @@ export const EmptyContainer = styled.div`
   align-items: center;
   justify-content: center;
   width: 100%;
+  font-size: 20px;
+  font-weight: 700;
+  height: 100vh;
 `;
 
 export const EmptyImage = styled.img`
@@ -111,4 +114,24 @@ export const EmptyImage = styled.img`
   }
   height: 200px;
   width: 200px;
+`;
+
+export const ErrorContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  font-size: 20px;
+  font-weight: 700;
+  height: 100vh;
+`;
+
+export const ImageError = styled.img`
+  @media ${device.tablet} {
+    height: 300px;
+    width: 500px;
+  }
+  height: 200px;
+  width: 300px;
 `;

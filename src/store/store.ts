@@ -6,7 +6,9 @@ import {
 import phoneBookReducer from "./reducers";
 import thunk from "redux-thunk";
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const localStorageMiddleware = ({ getState }: any) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return (next: any) => (action: any) => {
     try {
       const result = next(action);

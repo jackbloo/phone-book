@@ -1,5 +1,5 @@
 import React from "react";
-import { findByText, fireEvent, screen, waitFor } from "@testing-library/react";
+import { fireEvent, screen, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import SearchBar from "..";
 import * as reactRedux from "react-redux";

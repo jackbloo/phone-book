@@ -29,7 +29,10 @@ export const phonebookSlice = createSlice({
     },
     saveContactList: (state, { payload }) => {
       state.contactList = [];
-      state.tempContactList = [...payload?.contact];
+      if (payload?.contact) {
+        state.tempContactList = [...payload.contact];
+      }
+
       if (
         payload?.contact?.length === 0 ||
         payload?.contact?.length < state.limit

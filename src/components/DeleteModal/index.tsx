@@ -46,7 +46,9 @@ const DeleteModal = ({ handleRefetch }: DeleteModalProps) => {
       } else if (errors) {
         toast.error("Failed to delete contact");
       }
-    } catch (error) {}
+    } catch (error) {
+      return toast.error("Failed to delete contact");
+    }
   };
 
   return (

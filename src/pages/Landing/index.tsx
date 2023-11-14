@@ -26,7 +26,7 @@ const Landing = () => {
 
   const [name, setName] = useState("");
   const [isError, setIsError] = useState(false);
-  const handleSubmit = (e: any) => {
+  const handleSubmit = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (name === "" || !RegExp(/^[a-z ,.'-]+$/i).test(name)) {
       setIsError(true);

@@ -42,7 +42,7 @@ import {
 } from "../../utils";
 import { toast } from "react-toastify";
 
-const Modal = ({ refetch }: any) => {
+const Modal = ({ refetch }: { refetch: () => void }) => {
   const dispatch = useDispatch();
   const { createModal, editData, editModal, offset } = useSelector(
     (state: RootState) => state.phoneBook
@@ -139,7 +139,7 @@ const Modal = ({ refetch }: any) => {
       const tempPhones = editData?.phones?.map((el: { number: string }) => {
         return el.number;
       });
-      const tempError = editData?.phones?.map((el: { number: string }) => {
+      const tempError = editData?.phones?.map(() => {
         return false;
       });
       setPhoneNumbers(tempPhones);
@@ -171,6 +171,7 @@ const Modal = ({ refetch }: any) => {
           query: GET_CONTACT_LIST,
         });
         if (getError) {
+          throw new Error("Failed to add contact");
         } else if (allData) {
           const allNames = new Set(
             allData?.contact?.map(
@@ -209,7 +210,9 @@ const Modal = ({ refetch }: any) => {
         }
       } else {
         let flag = false;
+        // eslint-disable-next-line  prefer-const
         let options: {
+          // eslint-disable-next-line  @typescript-eslint/no-explicit-any
           [key: string]: string | number | any;
         } = {
           id: tempData?.id,
@@ -255,8 +258,8 @@ const Modal = ({ refetch }: any) => {
           handleReset
         );
       }
-    } catch (error: any) {
-      toast.error(error?.message);
+    } catch (error: unknown) {
+      toast.error(`Failed to ${createModal ? "Create" : "Update"} contact`);
     }
   };
   const showModal: boolean = createModal || editModal;
@@ -307,7 +310,7 @@ const Modal = ({ refetch }: any) => {
                         {index !== 0 && (
                           <RemovePhoneNumber
                             data-testid={`remove-${index}`}
-                            onClick={(e) => removePhoneNumber(index)}
+                            onClick={() => removePhoneNumber(index)}
                           >
                             Remove
                           </RemovePhoneNumber>

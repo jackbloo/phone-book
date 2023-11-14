@@ -1,5 +1,5 @@
 import React from "react";
-import { fireEvent, getByText, screen, waitFor } from "@testing-library/react";
+import { fireEvent, screen, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import Landing from "..";
 import * as reactRedux from "react-redux";
@@ -16,7 +16,7 @@ jest.mock("react-redux", () => {
 const mockedUsedNavigate = jest.fn();
 
 jest.mock("react-router-dom", () => ({
-  ...(jest.requireActual("react-router-dom") as any),
+  ...jest.requireActual("react-router-dom"),
   useNavigate: () => mockedUsedNavigate,
 }));
 

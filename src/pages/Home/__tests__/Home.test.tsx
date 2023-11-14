@@ -20,7 +20,7 @@ jest.mock("react-redux", () => {
 const mockedUsedNavigate = jest.fn();
 
 jest.mock("react-router-dom", () => ({
-  ...(jest.requireActual("react-router-dom") as any),
+  ...jest.requireActual("react-router-dom"),
   useNavigate: () => mockedUsedNavigate,
 }));
 
@@ -38,6 +38,7 @@ jest.mock("lodash.debounce", () => {
 
 const mockClient = createMockClient();
 const mockClientWithData = createMockClient();
+const mockClientError = createMockClient();
 
 describe("Unit testing of Home", () => {
   it("Should display Home with no data", () => {
@@ -112,5 +113,23 @@ describe("Unit testing of Home", () => {
     );
     waitFor(() => fireEvent.click(screen.getByTestId("next")));
     waitFor(() => expect(mockDispatch).toHaveBeenCalled());
+  });
+  it("Should display error message", () => {
+    mockClientError.setRequestHandler(GET_CONTACT_LIST, () =>
+      Promise.reject(true)
+    );
+    renderWithRedux(
+      <ApolloProvider client={mockClientError}>
+        <Home />
+      </ApolloProvider>,
+      {
+        ...initialState,
+      }
+    );
+    waitFor(() =>
+      expect(
+        screen.getByText("Oops! Something went wrong!")
+      ).toBeInTheDocument()
+    );
   });
 });
