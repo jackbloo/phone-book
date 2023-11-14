@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { ContactListType, InitialState } from "../../interface/reducer";
 import { randomAvatar } from "../../utils";
 
@@ -23,11 +23,14 @@ export const phonebookSlice = createSlice({
   name: "phonebook",
   initialState,
   reducers: {
-    login: (state, { payload }) => {
+    login: (state, { payload }: { payload: { userName: string } }) => {
       state.isLogin = true;
       state.userName = payload?.userName || "";
     },
-    saveContactList: (state, { payload }) => {
+    saveContactList: (
+      state,
+      { payload }: { payload: { contact: ContactListType[] } }
+    ) => {
       state.contactList = [];
       if (payload?.contact) {
         state.tempContactList = [...payload.contact];
@@ -56,19 +59,19 @@ export const phonebookSlice = createSlice({
       });
       state.contactList = newContactList;
     },
-    setSearchBar: (state, { payload }) => {
+    setSearchBar: (state, { payload }: PayloadAction<string>) => {
       state.contactList = [];
       state.offset = 0;
       state.noMoreData = false;
       state.search = payload;
     },
-    setDeleteModal: (state, { payload }) => {
+    setDeleteModal: (state, { payload }: PayloadAction<boolean>) => {
       state.deleteModalVisible = payload;
     },
-    setDeleteId: (state, { payload }) => {
+    setDeleteId: (state, { payload }: PayloadAction<number>) => {
       state.deleteId = payload;
     },
-    setDeleteData: (state, { payload }) => {
+    setDeleteData: (state, { payload }: PayloadAction<number>) => {
       const copyContactList = [...state.contactList];
       const copyFavoriteList = [...state.favoriteList];
       const filtered = copyContactList.filter((el) => el.id !== payload);
@@ -79,7 +82,7 @@ export const phonebookSlice = createSlice({
       state.favoriteList = filteredFavorite;
       state.deleteId = 0;
     },
-    setFavorite: (state, { payload }) => {
+    setFavorite: (state, { payload }: PayloadAction<ContactListType>) => {
       const copyFavoriteList = [...state.favoriteList];
       const copyContactList = [...state.tempContactList];
       const filtered = copyFavoriteList.filter((el) => el.id !== payload.id);
@@ -117,10 +120,10 @@ export const phonebookSlice = createSlice({
         state.limit = 10 + filtered.length;
       }
     },
-    setCreateModal: (state, { payload }) => {
+    setCreateModal: (state, { payload }: PayloadAction<boolean>) => {
       state.createModal = payload;
     },
-    setAddContact: (state, { payload }) => {
+    setAddContact: (state, { payload }: PayloadAction<ContactListType>) => {
       state.contactList?.pop();
       const newContactList = [
         { ...payload, image: randomAvatar() },
@@ -128,13 +131,13 @@ export const phonebookSlice = createSlice({
       ];
       state.contactList = [...newContactList];
     },
-    setEditModal: (state, { payload }) => {
+    setEditModal: (state, { payload }: PayloadAction<boolean>) => {
       state.editModal = payload;
     },
-    setEditData: (state, { payload }) => {
+    setEditData: (state, { payload }: PayloadAction<ContactListType>) => {
       state.editData = payload;
     },
-    setUpdateData: (state, { payload }) => {
+    setUpdateData: (state, { payload }: PayloadAction<ContactListType>) => {
       const copyContactList = [...state.contactList];
       const ids = new Set(copyContactList.map((el) => el.id));
       if (ids.has(payload?.id)) {
@@ -175,7 +178,7 @@ export const phonebookSlice = createSlice({
       state.isLogin = false;
       state.favoriteList = [];
     },
-    setOffset: (state, { payload }) => {
+    setOffset: (state, { payload }: PayloadAction<number>) => {
       state.offset = payload;
     },
   },

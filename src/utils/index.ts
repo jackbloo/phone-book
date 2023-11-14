@@ -19,6 +19,7 @@ import {
   EDIT_PHONE_NUMBER,
 } from "../apolloClient/queries";
 import { toast } from "react-toastify";
+import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
 
 const size = {
   mobileS: "320px",
@@ -80,23 +81,20 @@ export const checkIsError = (
     !RegExp(/^[a-z ,.'-]+$/i).test(lastName)
   );
 };
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
 export const handleCreateResult = (
   errors: readonly GraphQLError[] | undefined,
   data: CreateResponseType,
   createModal: boolean,
   offset: number,
   dispatch: RootDispatch,
-  setAddContact: (data: ContactListType) => {
-    payload: any;
-    type: "phonebook/setAddContact";
-  },
-  setOffset: (data: number) => { payload: any; type: "phonebook/setOffset" },
-  refetch: any,
-  setCreateModal: (data: boolean) => {
-    payload: any;
-    type: "phonebook/setCreateModal";
-  },
+  setAddContact: ActionCreatorWithPayload<
+    ContactListType,
+    "phonebook/setAddContact"
+  >,
+  setOffset: ActionCreatorWithPayload<number, "phonebook/setOffset">,
+  refetch: ({ offset }: { offset: number }) => void,
+  setCreateModal: ActionCreatorWithPayload<boolean, "phonebook/setCreateModal">,
   handleReset: () => void
 ) => {
   if (data) {
@@ -127,14 +125,11 @@ export const handleUpdateResult = (
   data: CreatePhoneResponseType,
   editModal: boolean,
   dispatch: RootDispatch,
-  setUpdateData: (data: ContactListType) => {
-    payload: any;
-    type: "phonebook/setUpdateData";
-  },
-  setEditModal: (data: boolean) => {
-    payload: any;
-    type: "phonebook/setEditModal";
-  },
+  setUpdateData: ActionCreatorWithPayload<
+    ContactListType,
+    "phonebook/setUpdateData"
+  >,
+  setEditModal: ActionCreatorWithPayload<boolean, "phonebook/setEditModal">,
   handleReset: () => void
 ) => {
   if (data) {
@@ -157,14 +152,11 @@ export const handleUpdatePhoneResult = (
   data: UpdatePhoneResponseType,
   editModal: boolean,
   dispatch: RootDispatch,
-  setUpdateData: (data: ContactListType) => {
-    payload: any;
-    type: "phonebook/setUpdateData";
-  },
-  setEditModal: (data: boolean) => {
-    payload: any;
-    type: "phonebook/setEditModal";
-  },
+  setUpdateData: ActionCreatorWithPayload<
+    ContactListType,
+    "phonebook/setUpdateData"
+  >,
+  setEditModal: ActionCreatorWithPayload<boolean, "phonebook/setEditModal">,
   handleReset: () => void
 ) => {
   if (data) {
@@ -188,14 +180,11 @@ export const handleUpdateContactResult = (
   data: UpdateContactResponseType,
   editModal: boolean,
   dispatch: RootDispatch,
-  setEditData: (data: ContactListType) => {
-    payload: any;
-    type: "phonebook/setEditData";
-  },
-  setEditModal: (data: boolean) => {
-    payload: any;
-    type: "phonebook/setEditModal";
-  },
+  setEditData: ActionCreatorWithPayload<
+    ContactListType,
+    "phonebook/setEditData"
+  >,
+  setEditModal: ActionCreatorWithPayload<boolean, "phonebook/setEditModal">,
   handleReset: () => void
 ) => {
   if (data) {
@@ -267,14 +256,11 @@ export const handlePhoneUpdate = (
   apolloClient: ApolloClient<NormalizedCacheObject>,
   editModal: boolean,
   dispatch: RootDispatch,
-  setUpdateData: (data: ContactListType) => {
-    payload: any;
-    type: "phonebook/setUpdateData";
-  },
-  setEditModal: (data: boolean) => {
-    payload: any;
-    type: "phonebook/setEditModal";
-  },
+  setUpdateData: ActionCreatorWithPayload<
+    ContactListType,
+    "phonebook/setUpdateData"
+  >,
+  setEditModal: ActionCreatorWithPayload<boolean, "phonebook/setEditModal">,
   handleReset: () => void
 ) => {
   if (phoneNumbers?.length !== tempData?.phones?.length) {
