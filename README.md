@@ -22,6 +22,7 @@
 - [Introduction](#introduction)
 - [Features](#features)
 - [Flow](#flow)
+- [Validation](#validation)
 - [Contributors](#contributors)
 - [Build Process](#build-process)
 - [Acknowledgments](#acknowledgments)
@@ -49,12 +50,25 @@ Features of PhoneBook:
 
 ## Flow
 
-1. User enter the name
-2.
+1. User enter the name (validation: only alphabets cannot be empty)
+2. User will be navigate to the home page (logged in)
+3. User can search by first name on the search bar
+4. User can add contact by clicking the blue button with plus sign
+5. User can remove contact by clicking the red icon button
+6. User can update contact by clicing the blue icon button
+
+## Validation
+
+1. Firstname
+   Cannot be empty, numbers only, no length validation
+2. Lastname
+   Cannot be empty, alphabets only, no length validation
+3. Phone number
+   Cannot be empty, start with 08, number only, no length validation
 
 ## Contributors
 
-This project follows the ReactJS + Typescript best practices
+This project follows the ReactJS + Typescript best practices and made by Jackbloo
 
 ## Build Process
 
@@ -66,4 +80,4 @@ This project follows the ReactJS + Typescript best practices
 
 ## Acknowledgments
 
-Thanks to ReactJS, Typescript, EmotionJS, Redux, Graphql
+Thanks to ReactJS, Typescript, EmotionJS, Redux, Graphql, React-toastify
