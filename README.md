@@ -99,6 +99,7 @@ This project follows the ReactJS + Typescript best practices and made by Jackblo
 - `npm run dev` to run the web-app
 - `npm run test` to start the jest testing without coverage
 - `npm run test:coverage` to start the jest testing with coverage (current is 88%)
+  <img src="https://i.imgur.com/FMxJIoX.png" width="450" alt="coverage-phone-book"/>
 
 ## Acknowledgments
 
