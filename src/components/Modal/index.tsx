@@ -136,10 +136,10 @@ const Modal = ({ refetch }: any) => {
       setTempData(editData);
       setFirstName(editData?.first_name);
       setLastName(editData?.last_name);
-      const tempPhones = editData?.phones?.map((el) => {
+      const tempPhones = editData?.phones?.map((el: { number: string }) => {
         return el.number;
       });
-      const tempError = editData?.phones?.map((el) => {
+      const tempError = editData?.phones?.map((el: { number: string }) => {
         return false;
       });
       setPhoneNumbers(tempPhones);
@@ -173,11 +173,16 @@ const Modal = ({ refetch }: any) => {
         if (getError) {
         } else if (allData) {
           const allNames = new Set(
-            allData?.contact?.map((el: ContactListType) =>
-              el.first_name.toLocaleLowerCase()
+            allData?.contact?.map(
+              (el: ContactListType) =>
+                `${el?.first_name?.toLocaleLowerCase()} ${el?.last_name?.toLocaleLowerCase()}`
             )
           );
-          if (allNames.has(firstName)) {
+          if (
+            allNames.has(
+              `${firstName.toLocaleLowerCase()} ${lastName.toLocaleLowerCase()}`
+            )
+          ) {
             setDuplicateNameError(true);
           } else {
             const { data, errors } = await apolloClient.mutate({
@@ -255,6 +260,8 @@ const Modal = ({ refetch }: any) => {
     }
   };
   const showModal: boolean = createModal || editModal;
+  const isFirstNameError: boolean = firstNameError || duplicateNameError;
+  const isLastNameError: boolean = lastNameError || duplicateNameError;
   return (
     <>
       {showModal &&
@@ -267,26 +274,31 @@ const Modal = ({ refetch }: any) => {
                   <Label>First Name</Label>
                   <Input
                     value={firstName}
+                    data-testid="first-name-input-modal"
                     onChange={(e) =>
                       handleOnChange("firstName", e.target.value)
                     }
                   />
-                  {firstNameError ||
-                    (duplicateNameError && (
-                      <ErrorLabel>
-                        {firstNameError
-                          ? "Please insert correct first name"
-                          : "The name is existed, Please choose another name"}
-                      </ErrorLabel>
-                    ))}
+                  {isFirstNameError && (
+                    <ErrorLabel>
+                      {firstNameError
+                        ? "Please insert correct First Name"
+                        : "The name is existed, Please choose another name"}
+                    </ErrorLabel>
+                  )}
 
                   <Label>Last Name</Label>
                   <Input
                     value={lastName}
+                    data-testid="last-name-input-modal"
                     onChange={(e) => handleOnChange("lastName", e.target.value)}
                   />
-                  {lastNameError && (
-                    <ErrorLabel>Please insert correct Last Name</ErrorLabel>
+                  {isLastNameError && (
+                    <ErrorLabel>
+                      {lastNameError
+                        ? "Please insert correct Last Name"
+                        : "The name is existed, Please choose another name"}
+                    </ErrorLabel>
                   )}
                   {phoneNumbers.map((el, index) => (
                     <PhoneNumberContainer key={index}>
@@ -294,6 +306,7 @@ const Modal = ({ refetch }: any) => {
                         Phone Number {index + 1}{" "}
                         {index !== 0 && (
                           <RemovePhoneNumber
+                            data-testid={`remove-${index}`}
                             onClick={(e) => removePhoneNumber(index)}
                           >
                             Remove
@@ -301,6 +314,7 @@ const Modal = ({ refetch }: any) => {
                         )}{" "}
                       </Label>
                       <Input
+                        data-testid="phone-number-input"
                         value={el}
                         onChange={(e) =>
                           handleOnChange("phoneNumber", e.target.value, index)
@@ -312,7 +326,10 @@ const Modal = ({ refetch }: any) => {
                     </PhoneNumberContainer>
                   ))}
                   {phoneNumbers.length < 3 && (
-                    <ExtraButton onClick={AddPhoneNumber}>
+                    <ExtraButton
+                      onClick={AddPhoneNumber}
+                      data-testid="add-phone-number"
+                    >
                       + Add more Phone Number
                     </ExtraButton>
                   )}
@@ -320,8 +337,12 @@ const Modal = ({ refetch }: any) => {
               </TopContent>
 
               <ActionContainer>
-                <TextNo onClick={handleCreate}>Submit</TextNo>
-                <TextAction onClick={onClose}>Cancel</TextAction>
+                <TextNo onClick={handleCreate} data-testid="submit-contact">
+                  Submit
+                </TextNo>
+                <TextAction onClick={onClose} data-testid="cancel">
+                  Cancel
+                </TextAction>
               </ActionContainer>
             </ModalContent>
           </ModalContainer>,

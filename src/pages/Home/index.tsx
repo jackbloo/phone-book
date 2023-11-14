@@ -33,7 +33,6 @@ import Arrow from "../../assets/image/arrow.webp";
 import Empty from "../../assets/image/emptyData.webp";
 import Shimmer from "../../components/Shimmer";
 import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
 const Home = () => {
   const dispatch = useDispatch();

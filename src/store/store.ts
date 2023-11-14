@@ -1,4 +1,8 @@
-import { configureStore } from "@reduxjs/toolkit";
+import {
+  combineReducers,
+  configureStore,
+  PreloadedState,
+} from "@reduxjs/toolkit";
 import phoneBookReducer from "./reducers";
 import thunk from "redux-thunk";
 
@@ -15,7 +19,7 @@ const localStorageMiddleware = ({ getState }: any) => {
   };
 };
 
-const loadFromLocalStorage = () => {
+export const loadFromLocalStorage = () => {
   try {
     const serialisedState = localStorage.getItem("phonebookPersistanceState");
     if (serialisedState === null) return undefined;
@@ -25,14 +29,20 @@ const loadFromLocalStorage = () => {
     return undefined;
   }
 };
-export const store = configureStore({
-  reducer: {
-    phoneBook: phoneBookReducer,
-  },
-  preloadedState: loadFromLocalStorage(),
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat([localStorageMiddleware, thunk]),
+
+const rootReducer = combineReducers({
+  phoneBook: phoneBookReducer,
 });
 
-export type RootState = ReturnType<typeof store.getState>;
-export type RootDispatch = typeof store.dispatch;
+export function setupStore(preloadedState?: PreloadedState<RootState>) {
+  return configureStore({
+    reducer: rootReducer,
+    preloadedState,
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware().concat([localStorageMiddleware, thunk]),
+  });
+}
+
+export type RootState = ReturnType<typeof rootReducer>;
+export type AppStore = ReturnType<typeof setupStore>;
+export type RootDispatch = AppStore["dispatch"];

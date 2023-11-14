@@ -31,20 +31,22 @@ const DeleteModal = ({ handleRefetch }: DeleteModalProps) => {
   };
 
   const handleDelete = async () => {
-    const { data, errors } = await apolloClient.mutate({
-      mutation: DELETE_CONTACT_PHONE,
-      variables: {
-        id: deleteId,
-      },
-    });
-    if (data) {
-      toast.success("Successfully delete contact");
-      handleRefetch();
-      dispatch(setDeleteData(deleteId));
-      dispatch(setDeleteModal(false));
-    } else if (errors) {
-      toast.error("Failed to delete contact");
-    }
+    try {
+      const { data, errors } = await apolloClient.mutate({
+        mutation: DELETE_CONTACT_PHONE,
+        variables: {
+          id: deleteId,
+        },
+      });
+      if (data) {
+        toast.success("Successfully delete contact");
+        handleRefetch();
+        dispatch(setDeleteData(deleteId));
+        dispatch(setDeleteModal(false));
+      } else if (errors) {
+        toast.error("Failed to delete contact");
+      }
+    } catch (error) {}
   };
 
   return (
@@ -52,11 +54,15 @@ const DeleteModal = ({ handleRefetch }: DeleteModalProps) => {
       {deleteModalVisible &&
         createPortal(
           <ModalContainer>
-            <ModalContent>
+            <ModalContent data-testid="delete-modal-container">
               <Title>Do you want to delete this contact?</Title>
               <ActionContainer>
-                <TextNo onClick={handleDelete}>Yes</TextNo>
-                <TextAction onClick={onClose}>No</TextAction>
+                <TextNo onClick={handleDelete} data-testid="handleDelete">
+                  Yes
+                </TextNo>
+                <TextAction onClick={onClose} data-testid="onClose">
+                  No
+                </TextAction>
               </ActionContainer>
             </ModalContent>
           </ModalContainer>,

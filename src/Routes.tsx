@@ -2,6 +2,7 @@ import * as React from "react";
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "./store/store";
+import "react-toastify/dist/ReactToastify.css";
 
 const Home = React.lazy(() => import("./pages/Home"));
 const Landing = React.lazy(() => import("./pages/Landing"));

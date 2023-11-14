@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import {
   ContactListComponentProps,
   ContactListType,
@@ -54,7 +54,7 @@ const ContactListComponent = ({
     dispatch(setEditModal(true));
   };
   return (
-    <Container>
+    <Container data-testid="contactlist-container">
       {[...favoriteList, ...contactList]?.map(
         (el: ContactListType, index: number) => (
           <Items key={el.id}>
@@ -69,6 +69,9 @@ const ContactListComponent = ({
                   }
                   src={el.isFavorite ? FavoriteIcon : UnfavoriteIcon}
                   alt={el.isFavorite ? "unfavorite" : "favorite" + index}
+                  data-testid={
+                    el.isFavorite ? `unfavorite-${index}` : `favorite-${index}`
+                  }
                 />
               </FavoriteContainer>
               <Avatar src={el.image} alt={`avatar-${el.id}`} />
@@ -99,12 +102,14 @@ const ContactListComponent = ({
                 src={DeleteIcon}
                 alt="delete-icon"
                 onClick={(e) => handleDelete(el.id)}
+                data-testid={`delete-${index}`}
               />
 
               <Icon
                 src={EditIcon}
                 alt="edit-icon"
                 onClick={(e) => handleEdit(el)}
+                data-testid={`edit-${index}`}
               />
             </ActionsContainer>
           </Items>
@@ -114,4 +119,4 @@ const ContactListComponent = ({
   );
 };
 
-export default React.memo(ContactListComponent);
+export default memo(ContactListComponent);

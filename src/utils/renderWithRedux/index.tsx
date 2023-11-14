@@ -1,19 +1,23 @@
-import React from "react";
+import React, { PropsWithChildren } from "react";
 import { render } from "@testing-library/react";
-import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
-import phoneBookReducer from "../../store/reducers";
+import { Provider } from "react-redux";
+import phoneBookReducer, { initialState } from "../../store/reducers";
 import { InitialState } from "../../interface/reducer";
 
-export const renderWithRedux = (
-  children: React.ReactNode,
-  initialState: InitialState
-) => {
+// interface ExtendedRenderOptions extends Omit<RenderOptions, "queries"> {
+//   preloadedState?: PreloadedState<RootState>;
+//   store?: AppStore;
+// }
+
+export function renderWithRedux(ui: React.ReactElement, state: InitialState) {
   const store = configureStore({
-    reducer: phoneBookReducer,
-    preloadedState: initialState,
+    reducer: { phoneBook: phoneBookReducer },
+    preloadedState: { phoneBook: state },
   });
-  return {
-    ...render(<Provider store={store}>{children}</Provider>),
-  };
-};
+  function Wrapper({ children }: PropsWithChildren<{}>): JSX.Element {
+    return <Provider store={store}>{children}</Provider>;
+  }
+
+  return { store, ...render(ui, { wrapper: Wrapper }) };
+}

@@ -53,11 +53,13 @@ const Landing = () => {
             <Input
               placeholder="What's your name?"
               onChange={(e) => handleChange(e.target.value)}
+              data-testid="name-input"
             />
             <Image
               src={SubmitName}
               alt="submit-icon"
               onClick={(e) => handleSubmit(e)}
+              data-testid="submit-name"
             />
           </InputContainer>
           {isError && (

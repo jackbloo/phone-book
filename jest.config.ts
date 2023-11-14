@@ -8,4 +8,15 @@ export default {
   moduleNameMapper: {
     "\\.(gif|ttf|eot|svg|png|webp)$": "identity-obj-proxy",
   },
+  collectCoverageFrom: [
+    "src/**",
+    "!src/utils/**",
+    "!src/store/**",
+    "!src/main.tsx",
+    "!src/Routes.tsx",
+    "!src/apolloClient/**",
+  ],
+  transformIgnorePatterns: [
+    "/node_modules/react-toastify/dist/ReactToastify.css",
+  ],
 };
