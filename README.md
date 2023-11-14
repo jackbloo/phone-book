@@ -1,12 +1,12 @@
 <h1 align="center"> PhoneBook: a Tokopedia exam </h1> <br>
 <p align="center">
-  <a href="https://phone-book-beige.vercel.app/home">
+  <a href="https://phone-book-beige.vercel.app/">
     <img alt="phoneBook" title="GitPoint" src="https://i.imgur.com/WMmWLBO.png" width="450">
   </a>
 </p>
 
 <p align="center">
- Phonebook everywhere. Built with Vite + React Typescript + emotionjs + Graphql + React testing library.
+ Phonebook everywhere. Built with Vite + React Typescript + emotionjs + Graphql + React testing library. The link to the web app is <a href="https://phone-book-beige.vercel.app/">here</a> or click the big phone book image above.
 </p>
 <p>Template by 
   <a href="https://github.com/gitpoint">
@@ -21,6 +21,7 @@
 
 - [Introduction](#introduction)
 - [Features](#features)
+- [Flow](#flow)
 - [Contributors](#contributors)
 - [Build Process](#build-process)
 - [Acknowledgments](#acknowledgments)
@@ -45,6 +46,11 @@ Features of PhoneBook:
 - Enter name to login
 - Easily logout
 - Mobile and Desktop ready!
+
+## Flow
+
+1. User enter the name
+2.
 
 ## Contributors
 
