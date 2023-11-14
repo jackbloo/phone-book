@@ -57,7 +57,6 @@ const Home = () => {
       ...options,
     },
   });
-
   useEffect(() => {
     if (search === "" && options.where) {
       setOptions({
@@ -91,7 +90,12 @@ const Home = () => {
   return (
     <Container>
       <ToastContainer />
-      <PlusButton onClick={(e) => dispatch(setCreateModal(true))}>+</PlusButton>
+      <PlusButton
+        data-testid="click-create-modal"
+        onClick={(e) => dispatch(setCreateModal(true))}
+      >
+        +
+      </PlusButton>
       <DeleteModal handleRefetch={refetch} />
       <Modal refetch={refetch} />
       <Navbar dispatch={dispatch} isLogin={isLogin} />
@@ -128,6 +132,7 @@ const Home = () => {
                         src={Arrow}
                         alt="icon-left"
                         style={{ transform: "rotateY(180deg)" }}
+                        data-testid="previous"
                         onClick={(e) => handleLoadMore(e, "substract")}
                       />
                     )}
@@ -144,6 +149,7 @@ const Home = () => {
                       <ArrowIcon
                         src={Arrow}
                         alt="icon-right"
+                        data-testid="next"
                         onClick={(e) => handleLoadMore(e, "add")}
                       />
                     )}
