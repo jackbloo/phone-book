@@ -81,7 +81,7 @@ const ContactListComponent = ({
                   el?.phones
                     ?.slice(0, 3)
                     .map((el: PhoneType, index: number) => (
-                      <Text key={index}>{el.number}</Text>
+                      <Text key={index}>{el?.number}</Text>
                     ))}
                 <MoreText>
                   {el?.phones?.length > 3 &&
@@ -89,7 +89,7 @@ const ContactListComponent = ({
                 </MoreText>
               </Subtitle>
               <SubtitleDesktop>
-                {el?.phones[0].number}
+                {el?.phones[0]?.number}
                 <MoreText>
                   {el?.phones?.length > 3 &&
                     `  +${el?.phones?.slice(0, 3)?.length} more`}
